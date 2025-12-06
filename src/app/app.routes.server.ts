@@ -3,35 +3,35 @@ import { RenderMode, ServerRoute } from '@angular/ssr';
 export const serverRoutes: ServerRoute[] = [
   {
     path: 'employees/:id',
-    renderMode: RenderMode.Client,
+    renderMode: RenderMode.Server,
   },
   {
     path: 'employees/:id/assign-tools',
-    renderMode: RenderMode.Client,
+    renderMode: RenderMode.Server,
   },
   {
     path: 'works/:id',
-    renderMode: RenderMode.Client,
+    renderMode: RenderMode.Server,
   },
   {
     path: 'works/:id/team',
-    renderMode: RenderMode.Client,
+    renderMode: RenderMode.Server,
   },
   {
     path: 'works/:id/assign-tools',
-    renderMode: RenderMode.Client,
+    renderMode: RenderMode.Server,
   },
   {
     path: 'inventory/:id',
-    renderMode: RenderMode.Client,
+    renderMode: RenderMode.Server,
   },
   {
     path: 'finances/obra/:id',
-    renderMode: RenderMode.Client,
+   renderMode: RenderMode.Server,
   },
   {
     path: 'incidents/:id',
-    renderMode: RenderMode.Client,
+    renderMode: RenderMode.Server,
   },
 
   {

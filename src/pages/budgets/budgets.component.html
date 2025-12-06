@@ -1,0 +1,83 @@
+<div class="relative flex min-h-dvh w-full flex-col bg-background-dark text-text-light">
+  <header class="sticky top-0 z-10 flex items-center justify-between border-b border-border-dark bg-background-dark/80 p-4 backdrop-blur-sm">
+    <a routerLink="/finances" class="flex size-10 shrink-0 items-center justify-center -ml-2">
+      <span class="material-symbols-outlined">arrow_back_ios_new</span>
+    </a>
+    <h1 class="flex-1 text-center text-lg font-bold">Gestión de Presupuestos</h1>
+    <button class="w-10 shrink-0 text-sm font-bold text-primary">Editar</button>
+  </header>
+
+  <main class="flex-1 px-4 py-6">
+    <section class="mb-8">
+      <h2 class="px-0 pb-3 text-lg font-bold">Vincular a Obra</h2>
+      <label class="relative flex flex-col">
+        <p class="pb-2 text-base font-medium text-text-muted">Seleccionar Obra Activa</p>
+        <select class="form-select flex h-14 w-full appearance-none overflow-hidden rounded-lg border-2 border-border-dark bg-card-dark p-4 pl-4 pr-10 text-base font-normal text-white focus:outline-0 focus:ring-2 focus:ring-primary focus:border-primary">
+          @for (obra of obrasActivas(); track obra) {
+            <option>{{ obra }}</option>
+          }
+        </select>
+        <span class="pointer-events-none absolute right-4 top-[58%] text-white">
+          <span class="material-symbols-outlined">unfold_more</span>
+        </span>
+      </label>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="px-0 pb-3 text-lg font-bold">Variables de Coste</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <label class="col-span-1 flex flex-col">
+          <p class="pb-2 text-sm font-medium text-text-muted">Mano de Obra (€)</p>
+          <input type="number" [ngModel]="manoDeObra()" (ngModelChange)="manoDeObra.set($event)" class="form-input flex h-14 w-full rounded-lg border-2 border-border-dark bg-card-dark p-4 text-white focus:outline-0 focus:ring-2 focus:ring-primary focus:border-primary">
+        </label>
+        <label class="col-span-1 flex flex-col">
+          <p class="pb-2 text-sm font-medium text-text-muted">Materiales (€)</p>
+          <input type="number" [ngModel]="materiales()" (ngModelChange)="materiales.set($event)" class="form-input flex h-14 w-full rounded-lg border-2 border-border-dark bg-card-dark p-4 text-white focus:outline-0 focus:ring-2 focus:ring-primary focus:border-primary">
+        </label>
+        <label class="col-span-1 flex flex-col">
+          <p class="pb-2 text-sm font-medium text-text-muted">Transporte (€)</p>
+          <input type="number" [ngModel]="transporte()" (ngModelChange)="transporte.set($event)" class="form-input flex h-14 w-full rounded-lg border-2 border-border-dark bg-card-dark p-4 text-white focus:outline-0 focus:ring-2 focus:ring-primary focus:border-primary">
+        </label>
+        <label class="col-span-1 flex flex-col">
+          <p class="pb-2 text-sm font-medium text-text-muted">Horas Extra (€)</p>
+          <input type="number" [ngModel]="horasExtra()" (ngModelChange)="horasExtra.set($event)" class="form-input flex h-14 w-full rounded-lg border-2 border-border-dark bg-card-dark p-4 text-white focus:outline-0 focus:ring-2 focus:ring-primary focus:border-primary">
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="px-0 pb-3 text-lg font-bold">Exigencias del Cliente</h2>
+      <textarea class="form-textarea flex min-h-32 w-full resize-y rounded-lg border-2 border-border-dark bg-card-dark p-4 text-base font-normal text-white placeholder:text-text-muted focus:outline-0 focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Añadir notas o requerimientos especiales del cliente..."></textarea>
+    </section>
+  </main>
+
+  <footer class="sticky bottom-0 z-10 mt-auto bg-background-dark/80 backdrop-blur-sm">
+    <div class="space-y-3 rounded-t-xl border-t border-border-dark bg-card-dark p-4">
+      <div class="flex justify-between gap-x-6">
+        <p class="text-sm text-text-muted">Subtotal</p>
+        <p class="text-right text-sm text-white">{{ subtotal() | currency:'€':'symbol':'1.2-2' }}</p>
+      </div>
+      <div class="flex justify-between gap-x-6">
+        <p class="text-sm text-text-muted">IVA (21%)</p>
+        <p class="text-right text-sm text-white">{{ iva() | currency:'€':'symbol':'1.2-2' }}</p>
+      </div>
+      <div class="my-3 h-px w-full bg-border-dark"></div>
+      <div class="flex items-center justify-between gap-x-6">
+        <p class="text-lg font-bold text-white">Total del Presupuesto</p>
+        <p class="text-right text-2xl font-bold text-primary">{{ total() | currency:'€':'symbol':'1.2-2' }}</p>
+      </div>
+    </div>
+    <div class="flex gap-2 bg-card-dark p-4 pt-3">
+      <button class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-primary text-primary hover:bg-primary/10 transition-colors">
+        <span class="material-symbols-outlined">send</span>
+      </button>
+      <button class="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-primary text-base font-bold text-black hover:bg-primary/90 transition-colors">
+        <span class="material-symbols-outlined">link</span>
+        <span>Asociar a Obra</span>
+      </button>
+      <button class="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-primary/80 text-base font-bold text-black hover:bg-primary/70 transition-colors">
+        <span>Guardar</span>
+      </button>
+    </div>
+  </footer>
+</div>

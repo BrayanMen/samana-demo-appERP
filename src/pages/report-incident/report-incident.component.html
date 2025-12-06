@@ -1,0 +1,70 @@
+<div class="relative flex min-h-dvh w-full flex-col bg-background-dark text-text-light">
+  <header class="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border-dark bg-background-dark/80 px-4 backdrop-blur-sm">
+    <a routerLink="/employee-dashboard" class="flex items-center justify-center p-2 -ml-2">
+      <span class="material-symbols-outlined">arrow_back_ios_new</span>
+    </a>
+    <h1 class="text-lg font-bold text-gray-100">Reportar Novedad</h1>
+    <div class="w-8"></div>
+  </header>
+
+  <main class="flex-1 overflow-y-auto p-4 pb-24 text-gray-100">
+    <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
+      <div>
+        <label for="incidentType" class="text-base font-medium leading-normal pb-2 text-gray-100">Tipo de incidencia</label>
+        <select id="incidentType" formControlName="incidentType" class="form-select flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg border border-primary/50 bg-card-dark text-gray-100 placeholder:text-gray-400 focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/20 h-14 p-3 text-base font-normal leading-normal">
+          <option>Falta de material</option>
+          <option>Problema de seguridad</option>
+          <option>Retraso en tarea</option>
+          <option>Daño a propiedad</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="description" class="text-base font-medium leading-normal pb-2 text-gray-100">Descripción detallada</label>
+        <textarea id="description" formControlName="description" class="form-textarea flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg border border-primary/50 bg-card-dark text-gray-100 placeholder:text-gray-400 focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/20 min-h-36 p-3 text-base font-normal leading-normal" placeholder="Describe qué ocurrió, quiénes están involucrados y el impacto en la obra..."></textarea>
+      </div>
+
+      <div>
+        <h3 class="text-base font-medium leading-normal pb-2 text-gray-100">Fotos</h3>
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-3">
+          @for (preview of previews(); track $index) {
+            <div class="relative w-full aspect-square group">
+              <img [src]="preview" alt="Vista previa de la incidencia" class="rounded-xl object-cover w-full h-full">
+              <button type="button" (click)="removeImage($index)" class="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                <span class="material-symbols-outlined text-base">close</span>
+              </button>
+            </div>
+          }
+          @if (previews().length < 5) {
+            <button type="button" (click)="triggerFileInput()" class="flex aspect-square w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-primary/50 bg-card-dark text-primary hover:border-primary hover:bg-primary/10 transition-colors">
+              <span class="material-symbols-outlined text-3xl">add_a_photo</span>
+              <span class="text-sm font-medium">Añadir Foto</span>
+            </button>
+          }
+          <input type="file" #fileInput (change)="onFileSelected($event)" multiple accept="image/*" class="hidden">
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-base font-medium leading-normal pb-2 text-gray-100">Ubicación</h3>
+        <div class="flex flex-col gap-3">
+          <div class="relative w-full h-40 overflow-hidden rounded-xl">
+            <div class="absolute inset-0 bg-center bg-cover" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB5lKKB3fHtiHNIklS7nGn6mIYp6lKHVzqTX4ImlWTRVsdionF6vU3Mq_AJH6CnePoZH64_Zvkje_tJ3Uhdsg1v6IGP5nO-qqj6iRZH6f17nGNgqzHBcEuF8WB741L0b3o9Iu94Y9l9vEzDUhXpgRsSyQtGGdmtsEL7Qdc2gl_s6u4mbnpImXW8xwnyE-DVU4-DGRnOZPEUiwf0Bhx0DfKyUrBN2xOPjyRkF-k97gOF6KyXb4vUqJ2ZN9Gj53-S6NC-HIJeSBFl1Xr5');"></div>
+            <button type="button" class="absolute top-2 right-2 flex items-center justify-center h-9 w-9 rounded-full bg-background-dark/80 shadow-md backdrop-blur-sm text-primary">
+              <span class="material-symbols-outlined">my_location</span>
+            </button>
+          </div>
+          <div class="flex items-start gap-3 rounded-lg border border-primary/50 bg-card-dark p-3">
+            <span class="material-symbols-outlined mt-1 text-primary">location_on</span>
+            <p class="flex-1 text-base text-gray-200">{{ incidentForm.get('location')?.value }}</p>
+          </div>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <footer class="fixed bottom-0 left-0 right-0 z-10 border-t border-border-dark bg-background-dark/80 p-4 backdrop-blur-sm">
+    <button (click)="onSubmit()" [disabled]="incidentForm.invalid" class="h-12 w-full rounded-xl bg-primary text-lg font-bold text-background-dark transition-colors hover:bg-primary/90 disabled:bg-primary/50 disabled:cursor-not-allowed">Enviar Reporte</button>
+  </footer>
+</div>

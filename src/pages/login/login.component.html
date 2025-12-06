@@ -1,0 +1,40 @@
+<div class="flex items-center justify-center min-h-dvh bg-background-dark p-4">
+  <div class="w-full max-w-sm">
+    <div class="text-center mb-10">
+      <h1 class="font-display text-4xl text-primary font-bold">SAMANA</h1>
+      <p class="text-text-muted">Gestión de Obras</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div>
+        <label for="email" class="block text-sm font-medium text-text-muted">Correo Electrónico</label>
+        <div class="mt-1">
+          <input formControlName="email" id="email" name="email" type="email" autocomplete="email" required
+                 class="w-full bg-card-dark rounded-lg border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary border-2">
+        </div>
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-text-muted">Contraseña</label>
+        <div class="mt-1">
+          <input formControlName="password" id="password" name="password" type="password" autocomplete="current-password" required
+                 class="w-full bg-card-dark rounded-lg border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary border-2">
+        </div>
+      </div>
+
+      @if(loginError()) {
+        <div class="bg-red-900/50 border border-red-500/50 text-red-300 text-sm rounded-lg p-3 text-center">
+            {{ loginError() }}
+        </div>
+      }
+
+      <div>
+        <button type="submit" [disabled]="loginForm.invalid"
+                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-background-dark bg-primary hover:bg-primary/90 disabled:bg-primary/50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+          Iniciar Sesión
+        </button>
+      </div>
+    </form>
+    
+  </div>
+</div>

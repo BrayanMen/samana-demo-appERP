@@ -1,0 +1,176 @@
+<div class="flex flex-col min-h-dvh">
+  <!-- Top App Bar -->
+  <header class="sticky top-0 z-10 bg-background-dark/80 backdrop-blur-sm">
+    <div class="flex items-center p-4">
+      <div class="flex size-12 shrink-0 items-center justify-start -ml-2">
+        <button class="p-2">
+          <span class="material-symbols-outlined text-text-light">menu</span>
+        </button>
+      </div>
+      <h1 class="font-display text-xl font-bold text-text-light flex-1 text-center">Panel de Métricas</h1>
+      <div class="flex w-12 items-center justify-end">
+        <button class="relative p-2">
+          <span class="material-symbols-outlined text-text-light">notifications</span>
+          <span class="absolute top-2 right-2 flex h-2 w-2">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-red-500"></span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="grow pb-24">
+    <!-- Segmented Buttons for Time Filter -->
+    <div class="px-4 py-3">
+      <div class="flex h-10 flex-1 items-center justify-center rounded-lg bg-card-dark p-1">
+        @for (filter of timeFilters; track filter) {
+          <button (click)="setTimeFilter(filter)" class="flex-1 text-center py-1.5 rounded-md text-sm font-semibold transition-colors duration-200" [class.bg-primary]="activeTimeFilter() === filter" [class.text-background-dark]="activeTimeFilter() === filter" [class.text-text-muted]="activeTimeFilter() !== filter">
+            {{ filter }}
+          </button>
+        }
+      </div>
+    </div>
+    
+    <div class="flex flex-col gap-6 p-4">
+      <!-- Card 1: Resumen Financiero -->
+      <div class="flex flex-col gap-4 rounded-xl bg-card-dark p-4">
+        <h3 class="font-display text-lg font-bold text-text-light">Resumen Financiero</h3>
+        <div>
+          <p class="text-text-muted text-sm">Ganancia Neta</p>
+          <p class="text-primary text-4xl font-bold">${{ financialSummary().netProfit.toLocaleString() }}</p>
+          <div class="flex items-center gap-1 text-green-400 text-sm font-medium">
+            <span class="material-symbols-outlined text-base">arrow_upward</span>
+            <span>{{ financialSummary().vsPreviousMonth }}% vs Mes Anterior</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 items-end pt-2">
+          <div class="text-center">
+             <div class="h-24 bg-primary rounded-t-md w-full"></div>
+             <p class="text-xs text-text-muted mt-1">Ganancias</p>
+          </div>
+           <div class="text-center">
+             <div class="h-12 bg-border-dark rounded-t-md w-full"></div>
+             <p class="text-xs text-text-muted mt-1">Gastos</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Cumplimiento de Plazos -->
+      <div class="flex flex-col gap-4 rounded-xl bg-card-dark p-4">
+        <h3 class="font-display text-lg font-bold text-text-light">Cumplimiento de Plazos</h3>
+        <div class="flex items-center justify-center py-4">
+          <div class="relative flex items-center justify-center w-40 h-40">
+            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 36 36">
+              <path class="stroke-border-dark" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="4"></path>
+              <path class="stroke-primary" [attr.stroke-dasharray]="deadlines().onTimePercentage + ', 100'" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="4" stroke-linecap="round"></path>
+            </svg>
+            <div class="text-center">
+              <p class="text-primary text-4xl font-bold">{{ deadlines().onTimePercentage }}%</p>
+              <p class="text-text-muted text-sm">A tiempo</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New Card: Employee Punctuality -->
+      <div class="flex flex-col gap-4 rounded-xl bg-card-dark p-4">
+        <h3 class="font-display text-lg font-bold text-text-light">Puntualidad de Empleados</h3>
+        <div class="flex items-center justify-center py-4">
+          <div class="relative flex items-center justify-center w-40 h-40">
+            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 36 36">
+              <path class="stroke-border-dark" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="4"></path>
+              <path class="stroke-primary" [attr.stroke-dasharray]="employeePunctuality().onTimePercentage + ', 100'" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="4" stroke-linecap="round"></path>
+            </svg>
+            <div class="text-center">
+              <p class="text-primary text-4xl font-bold">{{ employeePunctuality().onTimePercentage }}%</p>
+              <p class="text-text-muted text-sm">Puntual</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New Card: Project Completion Rate Over Time -->
+      <div class="flex flex-col gap-4 rounded-xl bg-card-dark p-4">
+        <h3 class="font-display text-lg font-bold text-text-light">Finalización de Obras (Mensual)</h3>
+        <div class="h-48 flex items-end justify-between space-x-3 pt-4">
+          @for(item of completionRateOverTime(); track item.month) {
+            <div class="flex h-full w-full flex-col items-center justify-end gap-2">
+              <div class="w-full h-full bg-border-dark rounded-t-sm flex items-end">
+                  <div class="w-full bg-primary rounded-t-sm" [style.height]="getBarHeight(item.completed)"></div>
+              </div>
+              <p class="text-xs text-text-muted">{{ item.month }}</p>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Card 3: Calidad de Obra -->
+      <div class="flex flex-col gap-4 rounded-xl bg-card-dark p-4">
+        <h3 class="font-display text-lg font-bold text-text-light">Calidad de Obra</h3>
+        <div class="flex items-center gap-6 py-4">
+          <div class="relative flex items-center justify-center w-32 h-32">
+            <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 36 36">
+              <circle class="stroke-red-500/30" cx="18" cy="18" fill="none" r="15.9155" stroke-width="5"></circle>
+              <circle class="stroke-primary" cx="18" cy="18" fill="none" r="15.9155" [attr.stroke-dasharray]="workQuality().approvedPercentage + ', 100'" stroke-width="5" stroke-linecap="round"></circle>
+            </svg>
+            <p class="text-2xl font-bold text-text-light">{{ workQuality().approvedPercentage }}%</p>
+          </div>
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-primary"></div>
+              <p class="text-text-light text-sm">Aprobado ({{ workQuality().approvedCount }})</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-red-500"></div>
+              <p class="text-text-light text-sm">Rechazado ({{ workQuality().rejectedCount }})</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+       <!-- New Card: Profit Margins per Obra -->
+      <div class="flex flex-col gap-4 rounded-xl bg-card-dark p-4">
+        <h3 class="font-display text-lg font-bold text-text-light">Márgenes por Obra</h3>
+        <div class="space-y-4">
+          @for(obra of profitMarginsPerObra(); track obra.name) {
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <p class="font-semibold text-text-light truncate pr-4">{{ obra.name }}</p>
+                <p class="font-medium text-green-400">{{ obra.profit | currency }}</p>
+              </div>
+              <div class="h-2 w-full rounded-full bg-border-dark">
+                <div class="h-2 rounded-full bg-primary" [style.width]="obra.margin + '%'"></div>
+              </div>
+              <p class="text-xs text-right text-text-muted mt-1">{{ obra.margin }}% Margen</p>
+            </div>
+          }
+        </div>
+      </div>
+
+
+      <!-- Card 4: Rendimiento General de Obras -->
+      <div class="flex flex-col gap-4 rounded-xl bg-card-dark p-4">
+        <h3 class="font-display text-lg font-bold text-text-light">Rendimiento General</h3>
+        <div class="grid grid-cols-3 gap-4 text-center py-4">
+          <div class="flex flex-col items-center gap-1">
+            <span class="material-symbols-outlined text-primary text-3xl">construction</span>
+            <p class="text-3xl font-bold text-text-light">{{ generalPerformance().active }}</p>
+            <p class="text-xs text-text-muted">Activas</p>
+          </div>
+          <div class="flex flex-col items-center gap-1">
+            <span class="material-symbols-outlined text-primary text-3xl">check_circle</span>
+            <p class="text-3xl font-bold text-text-light">{{ generalPerformance().completed }}</p>
+            <p class="text-xs text-text-muted">Completadas</p>
+          </div>
+          <div class="flex flex-col items-center gap-1">
+            <span class="material-symbols-outlined text-primary text-3xl">pending_actions</span>
+            <p class="text-3xl font-bold text-text-light">{{ generalPerformance().pending }}</p>
+            <p class="text-xs text-text-muted">Pendientes</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

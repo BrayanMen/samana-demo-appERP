@@ -1,0 +1,74 @@
+<div class="relative flex min-h-dvh w-full flex-col bg-background-dark text-text-light">
+  @if (work(); as workData) {
+    <header class="sticky top-0 z-10 flex flex-col bg-background-dark/80 backdrop-blur-sm border-b border-border-dark">
+      <div class="flex items-center p-4">
+        <a [routerLink]="['/works', workData.title]" class="flex size-10 shrink-0 items-center justify-center -ml-2">
+          <span class="material-symbols-outlined">arrow_back_ios_new</span>
+        </a>
+        <div class="flex flex-col items-center flex-1 -ml-10">
+          <h1 class="text-text-light text-lg font-bold leading-tight tracking-tight">Asignar a Obra</h1>
+          <p class="text-text-muted text-sm font-normal">{{ workData.title }}</p>
+        </div>
+      </div>
+      <div class="px-4 pb-4 pt-2">
+        <label class="relative flex items-center">
+            <span class="material-symbols-outlined pointer-events-none absolute left-4 text-text-muted">search</span>
+            <input 
+              type="text" 
+              [value]="searchTerm()"
+              (input)="updateSearch($event)"
+              placeholder="Buscar herramienta..."
+              class="w-full h-12 rounded-xl border-none bg-card-dark py-3 pl-12 pr-4 text-white placeholder-text-muted focus:ring-2 focus:ring-primary"
+            />
+        </label>
+      </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto pb-28">
+      <div class="flex flex-col gap-1">
+        @for (tool of filteredTools(); track tool.id) {
+          <div class="flex items-center gap-4 bg-background-dark px-4 min-h-[72px] py-2 justify-between">
+            <div class="flex items-center gap-4">
+              <div class="text-text-light flex items-center justify-center rounded-lg bg-card-dark shrink-0 size-12">
+                <span class="material-symbols-outlined text-3xl">{{ tool.icon }}</span>
+              </div>
+              <div class="flex flex-col justify-center">
+                <p class="text-text-light text-base font-medium line-clamp-1">{{ tool.name }}</p>
+                <p class="text-text-muted text-sm font-normal line-clamp-2">Disponibles: {{ tool.stock }}</p>
+              </div>
+            </div>
+            <div class="shrink-0">
+              <div 
+                class="flex items-center gap-2 text-text-light rounded-full p-1 transition-all"
+                [class.bg-card-dark]="tool.requestedQuantity === 0"
+                [class.bg-border-dark]="tool.requestedQuantity > 0"
+                [class.border]="tool.requestedQuantity > tool.stock"
+                [class.border-red-500]="tool.requestedQuantity > tool.stock"
+                [class.border-primary/50]="tool.requestedQuantity > 0 && tool.requestedQuantity <= tool.stock"
+              >
+                <button (click)="updateQuantity(tool.id, -1)" [disabled]="tool.requestedQuantity <= 0" class="text-lg font-medium leading-normal flex h-7 w-7 items-center justify-center rounded-full bg-card-dark cursor-pointer disabled:opacity-50 hover:bg-border-dark">-</button>
+                <span 
+                  class="text-base font-bold w-6 p-0 text-center bg-transparent"
+                  [class.text-primary]="tool.requestedQuantity > 0 && tool.requestedQuantity <= tool.stock"
+                  [class.text-red-500]="tool.requestedQuantity > tool.stock"
+                >
+                  {{ tool.requestedQuantity }}
+                </span>
+                <button (click)="updateQuantity(tool.id, 1)" class="text-lg font-medium leading-normal flex h-7 w-7 items-center justify-center rounded-full bg-card-dark cursor-pointer hover:bg-border-dark">+</button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </main>
+    
+    <footer class="absolute bottom-0 left-0 right-0 z-10 p-4 bg-gradient-to-t from-background-dark to-transparent">
+      <button (click)="confirmAssignment()" class="w-full h-14 rounded-full bg-primary text-background-dark text-lg font-bold flex items-center justify-center shadow-lg shadow-primary/20">
+        Asignar {{ totalSelected() }} Herramientas
+      </button>
+    </footer>
+
+  } @else {
+     <p class="text-center p-8">Cargando obra...</p>
+  }
+</div>

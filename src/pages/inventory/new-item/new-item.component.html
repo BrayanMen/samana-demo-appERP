@@ -1,0 +1,66 @@
+<div class="relative flex min-h-dvh w-full flex-col bg-background-dark text-text-light">
+  <header class="sticky top-0 z-10 flex items-center bg-background-dark/80 backdrop-blur-sm p-4 justify-between border-b border-border-dark">
+    <div class="flex w-12 shrink-0 items-center justify-start">
+      <a routerLink="/inventory" class="p-2 -ml-2">
+        <span class="material-symbols-outlined">arrow_back_ios_new</span>
+      </a>
+    </div>
+    <h1 class="text-text-light text-lg font-semibold leading-tight flex-1 text-center">Nuevo Material</h1>
+    <div class="flex w-12 items-center justify-end">
+       <button class="p-2 text-text-muted hover:text-white">
+        <span class="material-symbols-outlined">delete</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-grow p-4 pb-28">
+    <form [formGroup]="itemForm" (ngSubmit)="saveMaterial()" class="space-y-6">
+      <div>
+        <label for="name" class="block text-sm font-medium text-text-muted mb-1">Nombre</label>
+        <input id="name" formControlName="name" type="text" placeholder="Ej. Martillo de garra" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary">
+      </div>
+      
+      <div>
+        <label for="description" class="block text-sm font-medium text-text-muted mb-1">Descripción</label>
+        <textarea id="description" formControlName="description" placeholder="Añade una descripción detallada..." class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary min-h-24"></textarea>
+      </div>
+
+      <div>
+        <label for="sku" class="block text-sm font-medium text-text-muted mb-1">Código SKU (Opcional)</label>
+        <input id="sku" formControlName="sku" type="text" placeholder="Ej. HM-00123" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary">
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="initialQuantity" class="block text-sm font-medium text-text-muted mb-1">Cantidad Inicial</label>
+          <input id="initialQuantity" formControlName="initialQuantity" type="number" placeholder="0" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary">
+        </div>
+        <div>
+          <label for="unit" class="block text-sm font-medium text-text-muted mb-1">Unidad de Medida</label>
+          <select id="unit" formControlName="unit" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light focus:ring-2 focus:ring-primary focus:border-primary">
+            <option value="" disabled>Seleccionar</option>
+            <option value="unidades">Unidades</option>
+            <option value="cajas">Cajas</option>
+            <option value="m2">m²</option>
+            <option value="kg">kg</option>
+            <option value="litros">Litros</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label for="price" class="block text-sm font-medium text-text-muted mb-1">Precio (por unidad)</label>
+        <div class="relative">
+           <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">$</span>
+           <input id="price" formControlName="price" type="number" placeholder="0.00" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary pl-7">
+        </div>
+      </div>
+    </form>
+  </main>
+  
+  <footer class="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background-dark to-transparent">
+    <button (click)="saveMaterial()" [disabled]="itemForm.invalid" class="w-full h-14 rounded-xl bg-primary text-background-dark text-base font-bold flex items-center justify-center disabled:bg-primary/50 disabled:cursor-not-allowed">
+      Guardar Material
+    </button>
+  </footer>
+</div>

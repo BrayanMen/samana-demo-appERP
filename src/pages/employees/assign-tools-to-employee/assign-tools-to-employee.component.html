@@ -1,0 +1,100 @@
+<div class="relative flex min-h-dvh w-full flex-col bg-background-dark text-text-light">
+  @if (employee(); as emp) {
+  <header
+    class="sticky top-0 z-10 flex flex-col border-b border-border-dark bg-background-dark/80 backdrop-blur-sm"
+  >
+    <div class="flex h-14 items-center justify-between px-4">
+      <a
+        [routerLink]="['/employees', emp.id]"
+        class="flex size-10 items-center justify-center -ml-2"
+      >
+        <span class="material-symbols-outlined">arrow_back_ios_new</span>
+      </a>
+      <h1 class="flex-1 text-center text-lg font-bold">Asignar Herramientas</h1>
+      <div class="w-10"></div>
+    </div>
+
+    <div class="px-4 py-4">
+      <div class="flex items-center gap-4">
+        <img
+          [src]="emp.avatarUrl"
+          [alt]="'Foto de ' + emp.name"
+          class="h-12 w-12 shrink-0 rounded-full object-cover"
+        />
+        <div class="flex-1">
+          <p class="truncate text-base font-medium text-white">{{ emp.name }}</p>
+          <p class="text-sm text-text-muted">{{ emp.role }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-4 pb-4">
+      <label class="relative flex items-center">
+        <span class="material-symbols-outlined pointer-events-none absolute left-3 text-text-muted"
+          >search</span
+        >
+        <input
+          type="text"
+          [value]="searchTerm()"
+          (input)="updateSearch($event)"
+          placeholder="Buscar herramienta"
+          class="w-full rounded-lg border-none bg-card-dark py-3 pl-10 pr-4 text-white placeholder-text-muted focus:ring-2 focus:ring-primary"
+        />
+      </label>
+    </div>
+  </header>
+
+  <main class="flex-1 pb-28">
+    <div class="flex flex-col">
+      @for (tool of filteredTools(); track tool.id) {
+      <div class="flex min-h-[72px] items-center gap-4 border-b border-border-dark px-4 py-2">
+        <div class="flex flex-1 items-center gap-4">
+          <img
+            class="size-14 rounded-lg bg-card-dark object-contain p-1"
+            [src]="tool.imageUrl"
+            [alt]="tool.name"
+          />
+          <div class="flex flex-col justify-center">
+            <p class="line-clamp-1 text-base font-medium text-white">{{ tool.name }}</p>
+            <p class="line-clamp-2 text-sm text-text-muted">Stock disponible: {{ tool.stock }}</p>
+          </div>
+        </div>
+        <div class="shrink-0">
+          <div class="flex items-center gap-2 text-white">
+            <button
+              (click)="updateQuantity(tool.id, -1)"
+              [disabled]="tool.requestedQuantity <= 0"
+              class="flex h-8 w-8 items-center justify-center rounded-full bg-card-dark text-lg font-medium disabled:opacity-50 hover:bg-border-dark"
+            >
+              -
+            </button>
+            <span class="w-8 text-center text-lg font-medium">{{ tool.requestedQuantity }}</span>
+            <button
+              (click)="updateQuantity(tool.id, 1)"
+              [disabled]="tool.requestedQuantity >= tool.stock"
+              class="flex h-8 w-8 items-center justify-center rounded-full bg-card-dark text-lg font-medium disabled:opacity-50 hover:bg-border-dark"
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </main>
+
+  <footer
+    class="fixed bottom-0 left-0 w-full bg-gradient-to-t from-background-dark to-transparent p-4 pt-8"
+  >
+    <button
+      (click)="confirmAssignment()"
+      class="h-14 w-full rounded-xl bg-primary text-base font-bold text-background-dark"
+    >
+      Confirmar Asignación ({{ totalSelected() }})
+    </button>
+  </footer>
+
+  } @else {
+  <p class="text-center p-8">Cargando empleado...</p>
+  }
+</div>

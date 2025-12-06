@@ -1,0 +1,47 @@
+<div class="relative flex min-h-dvh w-full flex-col bg-background-dark text-text-light">
+  <header class="flex items-center p-4 pb-2 justify-between">
+    <div class="flex size-12 shrink-0 items-center justify-start">
+        <a routerLink="/employee-dashboard" class="p-2 -ml-2">
+            <span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
+        </a>
+    </div>
+    <h2 class="text-white text-lg font-bold flex-1 text-center pr-10">Registro de Asistencia</h2>
+  </header>
+
+  <main class="flex-grow flex flex-col px-4 pt-6 pb-2 text-center">
+    <div class="inline-flex items-center gap-2 rounded-full bg-card-dark px-4 py-2 self-center">
+      <div class="h-2.5 w-2.5 rounded-full bg-green-500"></div>
+      <p class="text-text-muted text-sm font-medium">En Jornada</p>
+    </div>
+
+    <h1 class="text-white tracking-tight text-6xl font-bold py-4">{{ time() }}</h1>
+    <p class="text-text-muted text-base font-normal">{{ userName() }} - {{ currentDate() }}</p>
+
+    <div class="px-4 py-6 flex-grow">
+      <div class="w-full h-full min-h-48 bg-center bg-no-repeat bg-cover rounded-xl overflow-hidden" 
+           style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAeSQGe56hrU13zEsZxghDvkkMmwsDL2wDbAzaR8jk497Sb38JgU4XF4sBzYYhmvUpFRWXPE4xfECv97rGJSqe2zEjQMbbJTFUjRIHng2TJ_-0Qu7SocpxWlLkHWVdMtB_wkXZK9GvmzpuN5ozdn3B36p9iQifnoCB9_orUZaHSIjU36IRKAJA_10jxh4mYxp9o5MPEEW1naXNejdYb8VaHBPcLrXLqATaA5eNlKCIcFuxZdH7MCk35rHgZ_tgxd8lSuqukhMci7LT3");'
+           aria-label="Mapa mostrando la ubicación actual del usuario.">
+      </div>
+    </div>
+    
+    <div class="flex items-center justify-center gap-2 pb-6">
+      <span class="material-symbols-outlined text-primary text-xl">location_on</span>
+      <p class="text-text-muted text-base font-medium">Obra Av. Principal 123</p>
+    </div>
+
+    <div class="grid grid-cols-3 items-center justify-center gap-4 pb-10">
+      <button class="flex flex-col items-center justify-center gap-2 rounded-xl bg-card-dark p-4 text-center text-text-muted transition-all cursor-not-allowed opacity-50">
+        <span class="material-symbols-outlined text-3xl">play_arrow</span>
+        <span class="text-base font-semibold">Entrada</span>
+      </button>
+      <button class="flex flex-col items-center justify-center gap-2 rounded-xl bg-primary p-4 text-center text-background-dark transition-all shadow-lg shadow-primary/20">
+        <span class="material-symbols-outlined text-3xl">pause</span>
+        <span class="text-base font-semibold">Descanso</span>
+      </button>
+      <button class="flex flex-col items-center justify-center gap-2 rounded-xl bg-primary p-4 text-center text-background-dark transition-all shadow-lg shadow-primary/20">
+        <span class="material-symbols-outlined text-3xl">stop</span>
+        <span class="text-base font-semibold">Salida</span>
+      </button>
+    </div>
+  </main>
+</div>

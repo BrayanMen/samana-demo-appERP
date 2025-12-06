@@ -1,0 +1,69 @@
+<div class="bg-background-dark min-h-dvh">
+  <!-- Top App Bar -->
+  <header class="sticky top-0 z-10 flex flex-col bg-background-dark/80 backdrop-blur-sm px-4 pt-4 pb-2 border-b border-border-dark">
+    <div class="flex items-center justify-between pb-4">
+      <h1 class="text-3xl font-bold tracking-tight text-white">Incidencias</h1>
+      <a routerLink="/report-incident" class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-background-dark hover:bg-primary/90 transition-colors" title="Reportar Incidencia">
+        <span class="material-symbols-outlined text-2xl">add</span>
+      </a>
+    </div>
+    <!-- Search Bar -->
+    <div class="relative">
+      <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-muted">search</span>
+      <input 
+        [value]="searchTerm()"
+        (input)="updateSearch($event)"
+        class="w-full rounded-lg border-none bg-card-dark py-3 pl-10 pr-4 text-white placeholder-text-muted focus:ring-2 focus:ring-primary" 
+        placeholder="Buscar por obra, empleado..." 
+        type="text"/>
+    </div>
+    <!-- Filter Chips -->
+    <div class="flex gap-2 pt-3 overflow-x-auto">
+      @for(filter of statusFilters; track filter) {
+        <button 
+          (click)="setFilter(filter)"
+          class="shrink-0 rounded-lg px-4 py-1.5 text-sm font-medium transition-colors"
+          [class.bg-primary]="activeFilter() === filter"
+          [class.text-background-dark]="activeFilter() === filter"
+          [class.bg-card-dark]="activeFilter() !== filter"
+          [class.text-text-light]="activeFilter() !== filter"
+        >
+          {{ filter }}
+        </button>
+      }
+    </div>
+  </header>
+
+  <!-- List Items -->
+  <main class="flex-grow p-4">
+    <div class="space-y-3">
+      @for (incident of filteredIncidents(); track incident.id) {
+        <a [routerLink]="['/incidents', incident.id]" class="block p-4 rounded-xl bg-card-dark hover:bg-border-dark transition-colors">
+          <div class="flex flex-col gap-4">
+            <div class="flex items-start justify-between">
+              <p class="text-base font-bold text-white">{{ incident.title }}</p>
+              <div class="h-7 shrink-0 rounded-full px-3 flex items-center justify-center" [class]="getStatusClass(incident.status)">
+                <p class="text-xs font-semibold">{{ incident.status }}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="text-primary flex items-center justify-center rounded-lg bg-border-dark shrink-0 size-12">
+                <span class="material-symbols-outlined">{{ incident.icon }}</span>
+              </div>
+              <div class="flex flex-1 flex-col justify-center text-sm">
+                <p class="text-text-light">Obra: <span class="font-medium">{{ incident.obra }}</span></p>
+                <p class="text-text-muted">Reporta: {{ incident.reporter }} - {{ incident.date }}</p>
+              </div>
+            </div>
+          </div>
+        </a>
+      } @empty {
+         <div class="rounded-xl border border-dashed border-border-dark bg-card-dark p-8 text-center text-text-muted mt-4">
+            <span class="material-symbols-outlined text-5xl">task_alt</span>
+            <p class="mt-2 font-semibold">Todo en orden</p>
+            <p class="mt-1 text-sm">No hay incidencias que coincidan con tus filtros.</p>
+        </div>
+      }
+    </div>
+  </main>
+</div>

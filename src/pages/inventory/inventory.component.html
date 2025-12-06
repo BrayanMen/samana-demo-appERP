@@ -1,0 +1,80 @@
+<div class="text-white min-h-dvh">
+  <header class="flex items-center p-4 pb-2 justify-between sticky top-0 z-10 border-b border-border-dark bg-background-dark/80 backdrop-blur-sm">
+    <div class="flex size-12 shrink-0"></div>
+    <h1 class="text-lg font-bold leading-tight flex-1 text-center">Gestión de Inventario</h1>
+    <div class="flex size-12 shrink-0 items-center justify-end">
+      <button class="p-2 text-text-muted hover:text-white">
+        <span class="material-symbols-outlined text-2xl">search</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-grow p-4 pb-24">
+    <section class="mb-6">
+      <h2 class="text-text-muted text-sm font-semibold uppercase tracking-wider mb-3">Acciones Rápidas</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <a routerLink="/inventory/new" class="flex flex-col items-center justify-center gap-2 rounded-xl bg-card-dark p-4 text-center text-white transition-colors hover:bg-border-dark">
+          <span class="material-symbols-outlined text-xl text-primary">add_circle</span>
+          <span class="text-sm font-semibold">Registrar Alta</span>
+        </a>
+        <a routerLink="/inventory/stock-exit" class="flex flex-col items-center justify-center gap-2 rounded-xl bg-card-dark p-4 text-center text-white transition-colors hover:bg-border-dark">
+          <span class="material-symbols-outlined text-xl text-primary">remove_circle</span>
+          <span class="text-sm font-semibold">Registrar Baja</span>
+        </a>
+        <a routerLink="/inventory/stock-return" class="flex flex-col items-center justify-center gap-2 rounded-xl bg-card-dark p-4 text-center text-white transition-colors hover:bg-border-dark">
+          <span class="material-symbols-outlined text-xl text-primary">undo</span>
+          <span class="text-sm font-semibold">Devolución</span>
+        </a>
+        <a routerLink="/inventory/stock-loss" class="flex flex-col items-center justify-center gap-2 rounded-xl bg-card-dark p-4 text-center text-white transition-colors hover:bg-border-dark">
+          <span class="material-symbols-outlined text-xl text-primary">heart_broken</span>
+          <span class="text-sm font-semibold">Pérdida/Daño</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-text-muted text-sm font-semibold uppercase tracking-wider">Stock Actual</h2>
+        <a class="text-primary text-sm font-medium" href="#">Ver todo</a>
+      </div>
+      <div class="space-y-3">
+        @for(item of inventoryItems(); track item.id) {
+          <a [routerLink]="['/inventory', item.id]" class="flex items-center gap-4 rounded-xl bg-card-dark p-3 hover:bg-border-dark transition-colors">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-border-dark">
+              <span class="material-symbols-outlined text-3xl text-slate-300">{{item.icon}}</span>
+            </div>
+            <div class="flex-grow">
+              <p class="font-semibold text-white">{{item.name}}</p>
+              <p class="text-sm text-slate-400">En stock: {{item.stock}} {{item.unit}}</p>
+            </div>
+            <div class="flex items-center justify-center size-8 shrink-0">
+              <span class="material-symbols-outlined text-xl text-slate-500">chevron_right</span>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+
+    @if (lowStockAlerts().length > 0) {
+      <section>
+        <h2 class="text-text-muted text-sm font-semibold uppercase tracking-wider mb-3">Alertas de Bajo Stock</h2>
+        <div class="space-y-3">
+          @for(item of lowStockAlerts(); track item.id) {
+            <a [routerLink]="['/inventory', item.id]" class="flex items-center gap-4 rounded-xl bg-yellow-900/40 border border-yellow-700 p-3 hover:bg-yellow-900/60 transition-colors">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/20">
+                <span class="material-symbols-outlined text-2xl text-yellow-400">warning</span>
+              </div>
+              <div class="flex-grow">
+                <p class="font-semibold text-yellow-300">Bajo Stock: {{item.name}}</p>
+                <p class="text-sm text-yellow-400/80">Quedan {{item.stock}} {{item.unit}}. Reordenar ahora.</p>
+              </div>
+              <div class="flex items-center justify-center size-8 shrink-0">
+                <span class="material-symbols-outlined text-xl text-yellow-500">chevron_right</span>
+              </div>
+            </a>
+          }
+        </div>
+      </section>
+    }
+  </main>
+</div>

@@ -1,0 +1,64 @@
+@if (obraDetails(); as obra) {
+  <div class="bg-background-dark text-text-light">
+    <header class="flex items-center p-4 pb-2 justify-between sticky top-0 z-10 bg-background-dark/80 backdrop-blur-sm">
+      <div class="flex size-12 shrink-0 items-center justify-start">
+        <a routerLink="/finances" class="p-2 -ml-2">
+          <span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
+        </a>
+      </div>
+      <h1 class="text-white text-lg font-display font-bold leading-tight flex-1 text-center truncate pr-10">{{ obra.name }}</h1>
+    </header>
+
+    <main class="flex flex-col gap-6 p-4">
+      <!-- Summary Card -->
+      <section class="rounded-xl border border-border-dark bg-card-dark p-4">
+        <h2 class="text-primary text-xl font-display font-bold pb-4">Resumen Financiero</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+          <div class="bg-background-dark/50 rounded-lg p-3">
+            <p class="text-sm text-text-muted">Ingresos Totales</p>
+            <p class="text-lg font-bold text-green-400">{{ obra.totalIncome | currency:'$':'symbol':'1.2-2' }}</p>
+          </div>
+          <div class="bg-background-dark/50 rounded-lg p-3">
+            <p class="text-sm text-text-muted">Egresos Totales</p>
+            <p class="text-lg font-bold text-red-400">{{ obra.totalExpenses | currency:'$':'symbol':'1.2-2' }}</p>
+          </div>
+          <div class="bg-background-dark/50 rounded-lg p-3 md:col-span-3">
+            <p class="text-sm text-text-muted">Ganancia Neta</p>
+            <p class="text-2xl font-bold text-primary">{{ obra.netProfit | currency:'$':'symbol':'1.2-2' }}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Transactions List -->
+      <section>
+        <h2 class="text-primary text-xl font-display font-bold pb-4">Movimientos</h2>
+        <div class="space-y-3">
+          @for (tx of obra.transactions; track $index) {
+            <div class="flex items-center gap-4 rounded-lg bg-card-dark p-3">
+              <div class="flex size-10 shrink-0 items-center justify-center rounded-full" [class]="tx.type === 'income' ? 'bg-green-500/20' : 'bg-red-500/20'">
+                <span class="material-symbols-outlined" [class]="tx.type === 'income' ? 'text-green-400' : 'text-red-400'">
+                  {{ tx.type === 'income' ? 'arrow_downward' : 'arrow_upward' }}
+                </span>
+              </div>
+              <div class="flex-1">
+                <p class="font-medium text-white">{{ tx.description }}</p>
+                <p class="text-xs text-text-muted">{{ tx.date | date:'dd/MM/yyyy' }}</p>
+              </div>
+              <p class="font-bold" [class]="tx.type === 'income' ? 'text-green-400' : 'text-red-400'">
+                {{ tx.amount | currency:'$':'symbol':'1.2-2' }}
+              </p>
+            </div>
+          } @empty {
+            <div class="rounded-lg bg-card-dark p-4 text-center text-text-muted">
+              <p>No hay movimientos registrados para esta obra.</p>
+            </div>
+          }
+        </div>
+      </section>
+    </main>
+  </div>
+} @else {
+  <div class="p-4 text-center text-text-muted">
+    <p>Cargando detalles de la obra...</p>
+  </div>
+}

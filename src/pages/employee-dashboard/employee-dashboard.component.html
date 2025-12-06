@@ -1,0 +1,38 @@
+<div class="bg-background-dark text-text-light min-h-dvh">
+  <header class="flex items-center justify-between p-4 pt-6 sticky top-0 bg-background-dark/80 backdrop-blur-sm z-10 border-b border-border-dark">
+    <div>
+      <p class="text-text-muted text-sm">Bienvenido,</p>
+      <h1 class="font-display text-2xl text-white">{{ user()?.name }}</h1>
+    </div>
+    <button (click)="logout()" class="flex items-center gap-2 rounded-lg bg-card-dark px-3 py-1.5 text-sm font-semibold text-primary hover:bg-border-dark transition-colors">
+      <span>Cerrar Sesión</span>
+      <span class="material-symbols-outlined text-base">logout</span>
+    </button>
+  </header>
+
+  <main class="p-4 space-y-4">
+    <h2 class="font-display text-xl text-white mt-4">Acciones Rápidas</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <a routerLink="/attendance" class="flex flex-col items-center justify-center gap-3 rounded-xl bg-card-dark p-6 text-center hover:bg-border-dark transition-colors">
+        <span class="material-symbols-outlined text-4xl text-primary">where_to_vote</span>
+        <span class="font-semibold text-text-light">Registrar Asistencia</span>
+      </a>
+      <a routerLink="/upload-evidence" class="flex flex-col items-center justify-center gap-3 rounded-xl bg-card-dark p-6 text-center hover:bg-border-dark transition-colors">
+        <span class="material-symbols-outlined text-4xl text-primary">upload_file</span>
+        <span class="font-semibold text-text-light">Subir Evidencia</span>
+      </a>
+      <a routerLink="/report-incident" class="flex flex-col items-center justify-center gap-3 rounded-xl bg-card-dark p-6 text-center hover:bg-border-dark transition-colors">
+        <span class="material-symbols-outlined text-4xl text-primary">report</span>
+        <span class="font-semibold text-text-light">Reportar Incidencia</span>
+      </a>
+       <a routerLink="/request-material" class="flex flex-col items-center justify-center gap-3 rounded-xl bg-card-dark p-6 text-center hover:bg-border-dark transition-colors">
+        <span class="material-symbols-outlined text-4xl text-primary">construction</span>
+        <span class="font-semibold text-text-light">Solicitar Material</span>
+      </a>
+       <a routerLink="/register-expense" class="flex flex-col items-center justify-center gap-3 rounded-xl bg-card-dark p-6 text-center hover:bg-border-dark transition-colors">
+        <span class="material-symbols-outlined text-4xl text-primary">receipt_long</span>
+        <span class="font-semibold text-text-light">Registrar Gasto</span>
+      </a>
+    </div>
+  </main>
+</div>

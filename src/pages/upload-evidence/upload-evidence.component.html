@@ -1,0 +1,59 @@
+<div class="relative flex min-h-dvh w-full flex-col bg-background-dark text-text-light antialiased">
+  <header class="sticky top-0 z-10 flex items-center bg-background-dark/80 backdrop-blur-sm p-4 justify-between border-b border-border-dark">
+    <div class="flex w-12 shrink-0 items-center justify-start">
+      <a routerLink="/employee-dashboard" class="p-2 -ml-2">
+        <span class="material-symbols-outlined text-text-light" style="font-size: 24px;">arrow_back_ios_new</span>
+      </a>
+    </div>
+    <h1 class="text-text-light text-lg font-semibold leading-tight flex-1 text-center">Subida de Evidencia</h1>
+    <div class="w-12"></div>
+  </header>
+
+  <main class="flex-grow flex flex-col p-4 space-y-6">
+    <h2 class="text-text-light tracking-tight text-3xl font-bold font-display">Sube la evidencia del día</h2>
+    <p class="text-text-muted text-base -mt-4">Añade fotos o videos del avance de hoy en la obra.</p>
+
+    <div class="grid grid-cols-2 gap-4">
+      <button (click)="triggerFileInput()" class="flex flex-col items-center justify-center gap-2 p-6 bg-card-dark border border-border-dark rounded-xl aspect-square hover:bg-border-dark transition-colors">
+        <span class="material-symbols-outlined text-primary" style="font-size: 32px;">photo_camera</span>
+        <span class="text-text-light font-medium text-center">Tomar foto o video</span>
+      </button>
+      <button (click)="triggerFileInput()" class="flex flex-col items-center justify-center gap-2 p-6 bg-card-dark border border-border-dark rounded-xl aspect-square hover:bg-border-dark transition-colors">
+        <span class="material-symbols-outlined text-primary" style="font-size: 32px;">photo_library</span>
+        <span class="text-text-light font-medium text-center">Elegir de la galería</span>
+      </button>
+      <input type="file" #fileInput (change)="onFileSelected($event)" multiple accept="image/*,video/*" class="hidden">
+    </div>
+
+    @if (previews().length > 0) {
+      <div class="grid grid-cols-3 gap-2">
+        @for (preview of previews(); track $index) {
+          <div class="relative group">
+            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" [style.background-image]="'url(' + preview + ')'"></div>
+            <button (click)="removeImage($index)" class="absolute top-1 right-1 bg-black/60 rounded-full p-1 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+              <span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    <div class="flex flex-col">
+      <label class="text-text-light text-base font-medium leading-normal mb-2" for="description">Descripción</label>
+      <textarea 
+        id="description" 
+        [value]="description()"
+        (input)="updateDescription($event)"
+        class="form-input flex w-full resize-none overflow-hidden rounded-lg text-text-light focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-dark bg-card-dark focus:border-primary min-h-32 placeholder:text-text-muted p-4 text-base font-normal leading-normal" 
+        placeholder="Añade una descripción del avance..."></textarea>
+    </div>
+    
+    <div class="flex-grow"></div>
+  </main>
+
+  <footer class="sticky bottom-0 bg-background-dark/80 backdrop-blur-sm p-4 border-t border-border-dark">
+    <button (click)="submitEvidence()" [disabled]="previews().length === 0" class="w-full flex min-w-[84px] max-w-[480px] mx-auto cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-4 bg-primary text-background-dark text-base font-bold leading-normal disabled:bg-primary/50 disabled:cursor-not-allowed">
+      Subir Evidencia
+    </button>
+  </footer>
+</div>

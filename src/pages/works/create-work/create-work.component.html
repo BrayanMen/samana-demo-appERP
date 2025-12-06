@@ -1,0 +1,56 @@
+<div class="relative flex min-h-dvh w-full flex-col bg-background-dark text-text-light">
+  <header class="sticky top-0 z-10 flex items-center bg-background-dark/80 backdrop-blur-sm p-4 border-b border-border-dark">
+    <div class="flex size-12 shrink-0 items-center justify-start -ml-2">
+      <a routerLink="/works" class="p-2">
+        <span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
+      </a>
+    </div>
+    <h1 class="text-white text-lg font-display font-bold leading-tight flex-1 text-center pr-10">Crear Nueva Obra</h1>
+  </header>
+
+  <main class="flex-1 px-4 py-6 space-y-6">
+    <form [formGroup]="workForm" (ngSubmit)="createWork()" class="space-y-6">
+      <div>
+        <label for="name" class="block text-sm font-medium text-text-muted mb-1">Nombre de la Obra</label>
+        <input id="name" formControlName="name" type="text" placeholder="Ej: Remodelación Cocina Central" class="w-full bg-card-dark rounded-lg border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary border-2">
+      </div>
+      <div>
+        <label for="description" class="block text-sm font-medium text-text-muted mb-1">Descripción</label>
+        <textarea id="description" formControlName="description" placeholder="Agregue una descripción detallada del proyecto..." rows="4" class="w-full bg-card-dark rounded-lg border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary border-2"></textarea>
+      </div>
+       <div>
+        <label for="location" class="block text-sm font-medium text-text-muted mb-1">Ubicación</label>
+        <input id="location" formControlName="location" type="text" placeholder="Dirección de la obra" class="w-full bg-card-dark rounded-lg border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary border-2">
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="startDate" class="block text-sm font-medium text-text-muted mb-1">Fecha de Inicio</label>
+          <input id="startDate" formControlName="startDate" type="date" class="w-full bg-card-dark rounded-lg border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary border-2">
+        </div>
+        <div>
+          <label for="endDate" class="block text-sm font-medium text-text-muted mb-1">Fecha de Fin</label>
+          <input id="endDate" formControlName="endDate" type="date" class="w-full bg-card-dark rounded-lg border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary border-2">
+        </div>
+      </div>
+       <div>
+        <label for="budget" class="block text-sm font-medium text-text-muted mb-1">Presupuesto Total ($)</label>
+        <input id="budget" formControlName="budget" type="number" placeholder="0.00" class="w-full bg-card-dark rounded-lg border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary border-2">
+      </div>
+       <div>
+        <label for="initialStatus" class="block text-sm font-medium text-text-muted mb-1">Estado Inicial</label>
+         <select id="initialStatus" formControlName="initialStatus" class="w-full bg-card-dark rounded-lg border-border-dark text-text-light focus:ring-2 focus:ring-primary focus:border-primary border-2">
+            <option>Planeación</option>
+            <option>En Progreso</option>
+            <option>Pausado</option>
+        </select>
+      </div>
+    </form>
+  </main>
+  
+  <footer class="sticky bottom-0 bg-background-dark/80 backdrop-blur-sm p-4 border-t border-border-dark">
+      <button (click)="createWork()" [disabled]="workForm.invalid" class="w-full h-14 rounded-xl bg-primary text-background-dark text-lg font-bold flex items-center justify-center disabled:bg-primary/50 disabled:cursor-not-allowed">
+          Crear Obra
+      </button>
+  </footer>
+
+</div>

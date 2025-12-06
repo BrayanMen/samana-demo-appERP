@@ -1,0 +1,74 @@
+<div class="bg-background-dark text-on-surface-dark min-h-dvh">
+  <header class="sticky top-0 z-10 bg-background-dark/80 backdrop-blur-sm px-4 pt-4 pb-2">
+    <div class="flex items-center justify-between pb-4">
+      <h1 class="text-3xl font-bold tracking-tight text-white">Gestión de Empleados</h1>
+      <a routerLink="/sanctions-rewards" class="flex size-10 shrink-0 items-center justify-center rounded-full bg-card-dark text-primary hover:bg-border-dark transition-colors" title="Sanciones y Recompensas">
+        <span class="material-symbols-outlined text-2xl">gavel</span>
+      </a>
+    </div>
+    <div class="relative">
+      <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-dark-secondary">search</span>
+      <input class="w-full rounded-lg border-none bg-card-dark py-3 pl-10 pr-4 text-white placeholder-on-surface-dark-secondary focus:ring-2 focus:ring-primary" placeholder="Buscar empleado..." type="text"/>
+    </div>
+    <div class="flex gap-2 pt-3">
+      <button class="flex items-center gap-2 rounded-full border border-on-surface-dark-secondary/50 bg-card-dark px-4 py-2 text-sm text-on-surface-dark">
+        <span>Rol</span>
+        <span class="material-symbols-outlined text-base">arrow_drop_down</span>
+      </button>
+      <button class="flex items-center gap-2 rounded-full border border-on-surface-dark-secondary/50 bg-card-dark px-4 py-2 text-sm text-on-surface-dark">
+        <span>Estado</span>
+        <span class="material-symbols-outlined text-base">arrow_drop_down</span>
+      </button>
+    </div>
+  </header>
+  <main class="px-4 pt-4 pb-24">
+    <div class="space-y-3">
+      @for (employee of employees(); track employee.id) {
+        <a [routerLink]="['/employees', employee.id]" class="flex items-center gap-4 rounded-xl bg-card-dark p-3 transition-colors hover:bg-border-dark" [class.opacity-60]="employee.status === 'inactive'">
+          <div class="relative">
+             <img [src]="employee.avatarUrl || 'https://via.placeholder.com/48'" alt="Foto de perfil de {{employee.name}}" class="size-12 shrink-0 rounded-full object-cover" />
+             @if (employee.status === 'inactive') {
+              <div class="absolute inset-0 rounded-full bg-black/50"></div>
+             }
+          </div>
+          <div class="flex-grow">
+            <p class="font-semibold text-white">{{ employee.name }}</p>
+            <p class="text-sm text-text-muted">{{ employee.role }} {{ employee.status === 'inactive' ? '(Inactivo)' : '' }}</p>
+          </div>
+          <button class="flex size-8 shrink-0 items-center justify-center text-on-surface-dark-secondary">
+            <span class="material-symbols-outlined text-xl">more_vert</span>
+          </button>
+        </a>
+      }
+    </div>
+  </main>
+  
+  <!-- FAB -->
+  <button (click)="openCreateModal()" class="fixed bottom-24 right-6 h-14 w-14 rounded-full bg-primary text-background-dark flex items-center justify-center shadow-lg z-20 hover:bg-primary/90 transition-colors">
+    <span class="material-symbols-outlined text-3xl">add</span>
+  </button>
+</div>
+
+<!-- Create Employee Modal -->
+@if (isModalOpen()) {
+  <div class="fixed inset-0 bg-black/60 z-30 flex items-center justify-center p-4" (click)="closeModal()">
+    <div class="bg-card-dark rounded-xl w-full max-w-md p-6" (click)="$event.stopPropagation()">
+      <h3 class="font-display text-xl text-primary mb-6">Nuevo Empleado</h3>
+      <form [formGroup]="employeeForm" (ngSubmit)="saveEmployee()">
+        <div class="space-y-4">
+          <input formControlName="name" type="text" placeholder="Nombre Completo" class="w-full bg-border-dark rounded-lg border-none text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary">
+          <input formControlName="role" type="text" placeholder="Rol del empleado" class="w-full bg-border-dark rounded-lg border-none text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary">
+          <input formControlName="avatarUrl" type="text" placeholder="URL de la foto de perfil (opcional)" class="w-full bg-border-dark rounded-lg border-none text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary">
+          <select formControlName="status" class="w-full bg-border-dark rounded-lg border-none text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary">
+            <option value="active">Activo</option>
+            <option value="inactive">Inactivo</option>
+          </select>
+        </div>
+        <div class="flex justify-end gap-3 mt-8">
+          <button type="button" (click)="closeModal()" class="px-4 py-2 rounded-lg bg-border-dark text-text-light hover:bg-border-dark/70">Cancelar</button>
+          <button type="submit" [disabled]="employeeForm.invalid" class="px-4 py-2 rounded-lg bg-primary text-background-dark disabled:bg-primary/50 disabled:cursor-not-allowed">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

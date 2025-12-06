@@ -1,0 +1,60 @@
+<div class="relative flex min-h-dvh w-full flex-col bg-background-dark text-text-light">
+  <header class="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border-dark bg-background-dark/80 px-4 backdrop-blur-sm">
+    <a routerLink="/employee-dashboard" class="flex items-center justify-center p-2 -ml-2">
+      <span class="material-symbols-outlined">arrow_back_ios_new</span>
+    </a>
+    <h1 class="text-lg font-bold text-gray-100">Registrar Gasto</h1>
+    <div class="w-8"></div>
+  </header>
+
+  <main class="flex-1 overflow-y-auto p-4 pb-24 text-gray-100">
+    <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
+      
+      <div>
+        <label for="amount" class="text-base font-medium text-gray-100 mb-2 block">Monto</label>
+        <input id="amount" formControlName="amount" type="number" placeholder="$0.00" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary">
+      </div>
+
+      <div>
+        <label for="category" class="text-base font-medium text-gray-100 mb-2 block">Categoría</label>
+        <select id="category" formControlName="category" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light focus:ring-2 focus:ring-primary focus:border-primary">
+          <option value="" disabled>Seleccionar categoría</option>
+          <option value="Materiales">Materiales</option>
+          <option value="Herramientas">Herramientas</option>
+          <option value="Transporte">Transporte</option>
+          <option value="Varios">Varios</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-base font-medium text-gray-100 mb-2 block">Comprobante</label>
+        @if (!receiptPreview()) {
+          <div (click)="triggerFileInput()" class="flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-primary/50 px-6 py-14 bg-card-dark cursor-pointer hover:bg-border-dark transition-colors">
+            <span class="material-symbols-outlined text-4xl text-primary">add_photo_alternate</span>
+            <p class="text-white text-lg font-bold">Adjuntar Foto del Comprobante</p>
+            <p class="text-text-muted text-sm">Toca para abrir la cámara o la galería</p>
+          </div>
+        } @else {
+          <div class="relative w-full max-w-xs mx-auto">
+            <img [src]="receiptPreview()" alt="Vista previa del comprobante" class="rounded-lg w-full h-auto">
+            <button type="button" (click)="removeReceipt()" class="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm hover:bg-black/80 transition-colors">
+              <span class="material-symbols-outlined text-base">close</span>
+            </button>
+          </div>
+        }
+        <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" class="hidden">
+      </div>
+
+      <div>
+        <label for="description" class="text-base font-medium text-gray-100 mb-2 block">Descripción (Opcional)</label>
+        <textarea id="description" formControlName="description" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary min-h-28" placeholder="Ej: Compra de clavos para el proyecto X"></textarea>
+      </div>
+
+    </form>
+  </main>
+  
+  <footer class="fixed bottom-0 left-0 right-0 z-10 border-t border-border-dark bg-background-dark/80 p-4 backdrop-blur-sm">
+    <button (click)="onSubmit()" [disabled]="expenseForm.invalid" class="h-14 w-full rounded-xl bg-primary text-lg font-bold text-background-dark transition-colors hover:bg-primary/90 disabled:bg-primary/50 disabled:cursor-not-allowed">Guardar Gasto</button>
+  </footer>
+
+</div>

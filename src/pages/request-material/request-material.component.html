@@ -1,0 +1,64 @@
+<div class="relative flex min-h-dvh w-full flex-col bg-background-dark">
+  <header class="sticky top-0 z-10 flex flex-col bg-background-dark/80 backdrop-blur-sm border-b border-border-dark">
+    <div class="flex items-center p-4">
+      <div class="flex size-12 shrink-0 items-center justify-start -ml-2">
+        <a routerLink="/employee-dashboard" class="p-2">
+          <span class="material-symbols-outlined text-text-light">arrow_back_ios_new</span>
+        </a>
+      </div>
+      <h1 class="text-text-light text-lg font-bold flex-1 text-center pr-10">Solicitud de Materiales</h1>
+      <div class="flex w-12 items-center justify-end">
+        <button class="p-2">
+          <span class="material-symbols-outlined text-text-light">history</span>
+        </button>
+      </div>
+    </div>
+    <div class="px-4 pb-4">
+      <label class="relative flex items-center">
+        <span class="material-symbols-outlined pointer-events-none absolute left-3 text-text-muted">search</span>
+        <input 
+          type="text" 
+          [value]="searchTerm()"
+          (input)="updateSearch($event)"
+          placeholder="Buscar material (ej. Cemento...)"
+          class="w-full rounded-lg border-none bg-card-dark py-3 pl-10 pr-4 text-white placeholder-text-muted focus:ring-2 focus:ring-primary"
+        />
+      </label>
+    </div>
+  </header>
+  
+  <main class="flex-grow px-4 space-y-3 pb-32">
+    @for (material of filteredMaterials(); track material.id) {
+      <div class="flex gap-4 bg-card-dark p-3 justify-between rounded-lg">
+        <div class="flex items-center gap-4">
+          <img [src]="material.imageUrl" [alt]="material.name" class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-[70px]">
+          <div class="flex flex-1 flex-col justify-center gap-1">
+            <p class="text-text-light text-base font-medium">{{ material.name }}</p>
+            <p class="text-text-muted text-sm">Disponible: <span class="font-medium" [class]="getStockClass(material.stock)">{{ material.stock }} {{ material.unit }}</span></p>
+          </div>
+        </div>
+        <div class="shrink-0 flex items-center justify-center">
+          <div class="flex items-center gap-2 text-text-light">
+            <button (click)="updateQuantity(material.id, -1)" [disabled]="material.requestedQuantity === 0" class="flex h-8 w-8 items-center justify-center rounded-full bg-border-dark disabled:opacity-50 disabled:cursor-not-allowed hover:bg-border-dark/70 transition-colors">-</button>
+            <span class="text-base font-medium w-8 text-center">{{ material.requestedQuantity }}</span>
+            <button (click)="updateQuantity(material.id, 1)" [disabled]="material.requestedQuantity >= material.stock" class="flex h-8 w-8 items-center justify-center rounded-full bg-border-dark disabled:opacity-50 disabled:cursor-not-allowed hover:bg-border-dark/70 transition-colors">+</button>
+          </div>
+        </div>
+      </div>
+    } @empty {
+       <div class="rounded-lg border border-dashed border-border-dark bg-card-dark p-8 text-center text-text-muted mt-4">
+        <span class="material-symbols-outlined text-5xl">search_off</span>
+        <p class="mt-2 font-semibold">No se encontraron materiales</p>
+        <p class="mt-1 text-sm">Prueba con otro término de búsqueda.</p>
+      </div>
+    }
+  </main>
+  
+  @if(totalRequestedItems() > 0) {
+    <footer class="fixed bottom-20 left-0 right-0 p-4 bg-gradient-to-t from-background-dark to-transparent z-10">
+      <button (click)="submitRequest()" class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 bg-primary text-background-dark gap-2 text-base font-bold">
+        <span>Revisar Solicitud ({{ totalRequestedItems() }})</span>
+      </button>
+    </footer>
+  }
+</div>

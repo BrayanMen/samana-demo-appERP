@@ -1,0 +1,22 @@
+<nav class="fixed bottom-0 left-0 right-0 z-20 bg-card-dark/80 backdrop-blur-lg border-t border-border-dark">
+  <div class="mx-auto flex max-w-md items-center justify-around px-2 py-2">
+    @for (item of navItems(); track item.path) {
+      <a 
+        [routerLink]="item.path" 
+        routerLinkActive="active-nav-link"
+        #rla="routerLinkActive"
+        class="flex flex-col items-center gap-1 p-2 rounded-lg text-text-muted transition-colors duration-200"
+        [class.active-nav-link]="rla.isActive"
+      >
+        <span class="material-symbols-outlined transition-all duration-200" [style.font-variation-settings]="rla.isActive ? '\'FILL\' 1' : '\'FILL\' 0'">{{ item.icon }}</span>
+        <span class="text-xs font-medium">{{ item.label }}</span>
+      </a>
+    }
+  </div>
+</nav>
+
+<style>
+  .active-nav-link {
+    color: #D4AF37; /* primary-gold */
+  }
+</style>

@@ -1,0 +1,234 @@
+@if (workDetails(); as work) {
+<div class="bg-background-dark text-text-light min-h-dvh">
+  <header class="flex items-center p-4 sticky top-0 z-10 bg-background-dark/80 backdrop-blur-sm border-b border-border-dark">
+    <div class="flex size-12 shrink-0 items-center justify-start -ml-2">
+      <a routerLink="/works" class="p-2">
+        <span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
+      </a>
+    </div>
+    <h1 class="text-white text-lg font-display font-bold leading-tight flex-1 text-center truncate pr-10">{{ work.title }}</h1>
+  </header>
+
+  <main class="flex flex-col gap-6 p-4 pb-24">
+    <!-- Status and Deadline -->
+    <section class="flex justify-between items-center">
+      <div class="relative">
+        <button (click)="toggleStatusDropdown()" class="rounded-full px-4 py-1.5 text-sm font-medium flex items-center gap-2 transition-colors duration-200" [class]="getStatusClass(work.status)">
+          <span>{{ work.status }}</span>
+          <span class="material-symbols-outlined text-base">arrow_drop_down</span>
+        </button>
+
+        @if (isStatusDropdownOpen()) {
+          <div class="absolute top-full mt-2 w-48 bg-card-dark border border-border-dark rounded-lg shadow-lg z-20">
+            @for (status of availableStatuses(); track status) {
+              <button (click)="selectStatus(status)" class="w-full text-left px-4 py-2 text-sm hover:bg-border-dark transition-colors" [class.font-bold]="status === work.status">
+                {{ status }}
+              </button>
+            }
+          </div>
+        }
+      </div>
+      <p class="text-sm text-text-muted">{{ work.deadline }}</p>
+    </section>
+
+    <!-- Progress Bar -->
+    <section>
+        <div class="flex justify-between text-sm text-text-muted mb-1">
+            <span>Progreso</span>
+            <span class="font-semibold text-primary">{{ workProgress() }}%</span>
+        </div>
+        <div class="h-2 w-full rounded-full bg-border-dark">
+            <div class="h-2 rounded-full bg-primary" [style.width]="workProgress() + '%'"></div>
+        </div>
+    </section>
+
+    <!-- Key Metrics -->
+    <section class="grid grid-cols-3 gap-4 text-center border-y border-border-dark py-4">
+        <div>
+            <p class="text-sm text-text-muted">Plazo</p>
+            <p class="mt-1 text-lg font-semibold" [class]="getTimelineClass(work.timeline)">{{ work.timeline }}</p>
+        </div>
+        <div>
+            <p class="text-sm text-text-muted">Presupuesto</p>
+            <p class="mt-1 text-lg font-semibold text-white">{{ work.budget }}</p>
+        </div>
+        <div>
+            <p class="text-sm text-text-muted">Calidad</p>
+            <p class="mt-1 text-lg font-semibold text-primary">{{ work.quality }}%</p>
+        </div>
+    </section>
+    
+    <!-- Galería de Avances -->
+    <section>
+        <h3 class="font-display text-xl text-white mb-3">Galería de Avances</h3>
+        <div class="flex overflow-x-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4 pb-2">
+            <div class="flex items-stretch gap-3">
+                @for (evidence of work.evidence; track $index) {
+                    <div (click)="openEvidenceModal(evidence)" class="flex-shrink-0 w-36 h-24 rounded-lg bg-cover bg-center bg-no-repeat cursor-pointer hover:opacity-80 transition-opacity" [style.background-image]="'url(' + evidence.url + ')'"></div>
+                } @empty {
+                    <div class="w-full rounded-lg border border-dashed border-border-dark bg-card-dark p-6 text-center text-text-muted">
+                        <p class="font-semibold">Sin Evidencias</p>
+                        <p class="text-sm">Los empleados aún no han subido fotos o videos.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Tareas de la Obra -->
+    <section>
+        <div class="flex justify-between items-center mb-3">
+            <h3 class="font-display text-xl text-white">Tareas de la Obra</h3>
+            <button (click)="openCreateTaskModal()" class="flex items-center gap-2 rounded-lg bg-primary/20 px-3 py-1.5 text-sm font-semibold text-primary hover:bg-primary/30 transition-colors">
+                <span class="material-symbols-outlined text-base">add</span>
+                <span>Agregar Tarea</span>
+            </button>
+        </div>
+        <div class="space-y-2">
+            @for (task of work.tasks; track task.id) {
+            <div class="flex items-center gap-3 bg-card-dark p-3 rounded-lg">
+                <input type="checkbox" [checked]="task.completed" (change)="toggleTaskStatus(task.id)" class="h-5 w-5 rounded bg-border-dark border-text-muted text-primary focus:ring-primary shrink-0">
+                <div class="flex-grow">
+                    <p class="text-text-light" [class.line-through]="task.completed">{{ task.name }}</p>
+                    <p class="text-xs text-text-muted">{{ task.dueDate | date:'dd/MM/yyyy' }}</p>
+                </div>
+                @if (task.assignedTo && getEmployeeById(task.assignedTo); as employee) {
+                  <img [src]="employee.avatarUrl" [alt]="employee.name" class="h-8 w-8 rounded-full object-cover ring-2 ring-border-dark" [title]="'Asignado a ' + employee.name">
+                } @else {
+                  <div class="h-8 w-8 rounded-full bg-border-dark flex items-center justify-center" title="Sin asignar">
+                    <span class="material-symbols-outlined text-text-muted text-lg">person</span>
+                  </div>
+                }
+                <div class="relative group">
+                     <button class="p-2 text-text-muted hover:text-white">
+                        <span class="material-symbols-outlined">more_vert</span>
+                     </button>
+                     <div class="absolute right-0 top-full mt-1 w-32 bg-border-dark border border-border-dark rounded-md shadow-lg z-20 hidden group-hover:block">
+                        <button (click)="openEditTaskModal(task)" class="w-full text-left px-3 py-2 text-sm text-text-light hover:bg-card-dark">Editar</button>
+                        <button (click)="deleteTask(task.id)" class="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-card-dark">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+            } @empty {
+            <div class="rounded-lg border border-dashed border-border-dark bg-card-dark p-6 text-center text-text-muted">
+                <p class="font-semibold">No hay tareas</p>
+                <p class="text-sm">Añade la primera tarea para esta obra.</p>
+            </div>
+            }
+        </div>
+    </section>
+
+    <!-- Equipo Asignado -->
+    <section>
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="font-display text-xl text-white">Equipo Asignado</h3>
+        <div class="flex items-center gap-2">
+           <button (click)="openAssignModal()" class="text-sm bg-primary/20 text-primary px-3 py-1.5 rounded-lg font-semibold hover:bg-primary/30 transition-colors">Asignar Empleado</button>
+           <a [routerLink]="['/works', work.title, 'team']" class="text-sm bg-card-dark border border-border-dark px-3 py-1.5 rounded-lg font-semibold hover:bg-border-dark transition-colors">Ver Detalles</a>
+        </div>
+      </div>
+       @if (work.assignedTeamIds.length > 0) {
+        <div class="flex -space-x-2">
+          @for(employeeId of work.assignedTeamIds; track employeeId) {
+            @if(getEmployeeById(employeeId); as employee) {
+              <img [src]="employee.avatarUrl" [alt]="employee.name" class="h-10 w-10 rounded-full object-cover ring-2 ring-background-dark" [title]="employee.name">
+            }
+          }
+        </div>
+      } @else {
+        <p class="text-sm text-text-muted">No hay empleados asignados.</p>
+      }
+    </section>
+
+    <!-- Herramientas Asignadas -->
+    <section>
+        <div class="flex justify-between items-center mb-3">
+            <h3 class="font-display text-xl text-white">Herramientas</h3>
+            <button (click)="assignTools()" class="flex items-center gap-2 rounded-lg bg-primary/20 px-3 py-1.5 text-sm font-semibold text-primary hover:bg-primary/30 transition-colors">
+                <span class="material-symbols-outlined text-base">add</span>
+                <span>Asignar Herramientas</span>
+            </button>
+        </div>
+        <div class="p-4 bg-card-dark rounded-lg border border-border-dark text-center text-text-muted">
+            <p class="text-sm">Funcionalidad de visualización de herramientas en desarrollo.</p>
+        </div>
+    </section>
+
+    <!-- Actividad Reciente -->
+    <section>
+      <h3 class="font-display text-xl text-white mb-3">Actividad Reciente</h3>
+      <div class="space-y-3">
+        @for (activity of work.activity; track $index) {
+          <div class="flex items-center gap-4 rounded-lg bg-card-dark p-3">
+            <div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-border-dark">
+              <span class="material-symbols-outlined text-primary">{{ activity.icon }}</span>
+            </div>
+            <div class="flex-1">
+              <p class="font-medium text-white">{{ activity.description }}</p>
+              <p class="text-xs text-text-muted">{{ activity.timestamp }}</p>
+            </div>
+          </div>
+        } @empty {
+          <div class="rounded-lg border border-dashed border-border-dark bg-card-dark p-6 text-center text-text-muted">
+            <span class="material-symbols-outlined text-4xl">history_toggle_off</span>
+            <p class="mt-2 font-semibold">Sin Actividad</p>
+            <p class="text-sm">No hay actividad reciente para esta obra.</p>
+          </div>
+        }
+      </div>
+    </section>
+
+  </main>
+
+  <button (click)="openModal()" class="fixed bottom-24 right-6 h-14 w-14 rounded-full bg-primary text-background-dark flex items-center justify-center shadow-lg z-20 hover:bg-primary/90 transition-colors">
+    <span class="material-symbols-outlined text-3xl">add</span>
+  </button>
+</div>
+
+<!-- Task Modal -->
+@if (isTaskModalOpen()) {
+  <div class="fixed inset-0 bg-black/60 z-30 flex items-center justify-center p-4" (click)="closeTaskModal()">
+    <div class="bg-card-dark rounded-xl w-full max-w-md p-6" (click)="$event.stopPropagation()">
+      <h3 class="font-display text-xl text-primary mb-6">{{ editingTask() ? 'Editar Tarea' : 'Nueva Tarea' }}</h3>
+      <form [formGroup]="taskForm" (ngSubmit)="saveTask()">
+        <div class="space-y-4">
+          <input formControlName="name" type="text" placeholder="Nombre de la tarea" class="w-full bg-border-dark rounded-lg border-none text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary">
+          <input formControlName="dueDate" type="date" class="w-full bg-border-dark rounded-lg border-none text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary">
+          <select formControlName="assignedTo" class="w-full bg-border-dark rounded-lg border-none text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary">
+            <option value="">Sin Asignar</option>
+            @for (employee of allEmployees(); track employee.id) {
+              <option [value]="employee.id">{{ employee.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="flex justify-end gap-3 mt-8">
+          <button type="button" (click)="closeTaskModal()" class="px-4 py-2 rounded-lg bg-border-dark text-text-light hover:bg-border-dark/70">Cancelar</button>
+          <button type="submit" [disabled]="taskForm.invalid" class="px-4 py-2 rounded-lg bg-primary text-background-dark disabled:bg-primary/50 disabled:cursor-not-allowed">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+<!-- Evidence Detail Modal -->
+@if (isEvidenceModalOpen() && selectedEvidence(); as evidence) {
+  <div class="fixed inset-0 bg-black/80 z-40 flex items-center justify-center p-4" (click)="closeEvidenceModal()">
+    <div class="bg-card-dark rounded-xl w-full max-w-lg p-4" (click)="$event.stopPropagation()">
+      <img [src]="evidence.url" [alt]="evidence.description" class="w-full h-auto max-h-[60vh] object-contain rounded-lg">
+      <div class="mt-4 px-2">
+        <p class="text-text-light font-semibold">{{ evidence.description }}</p>
+        <p class="text-sm text-text-muted mt-1">Subido por {{ evidence.uploaderName }} el {{ evidence.date | date:'dd/MM/yyyy' }}</p>
+      </div>
+      <div class="text-right mt-4">
+        <button (click)="closeEvidenceModal()" class="px-4 py-2 rounded-lg bg-border-dark text-text-light hover:bg-border-dark/70">Cerrar</button>
+      </div>
+    </div>
+  </div>
+}
+
+
+} @else {
+  <div class="flex items-center justify-center h-screen">
+    <p class="text-text-muted">Cargando detalles de la obra...</p>
+  </div>
+}

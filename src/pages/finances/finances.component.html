@@ -1,0 +1,163 @@
+<div class="bg-background-dark pb-36">
+  <header class="flex items-center p-4 pb-2 justify-between sticky top-0 z-10 bg-background-dark/80 backdrop-blur-sm">
+    <div class="flex size-12 shrink-0"></div>
+    <h1 class="text-white text-xl font-display font-bold leading-tight flex-1 text-center">Reportes Financieros</h1>
+    <div class="flex w-12 items-center justify-end">
+      <button (click)="exportToPDF()" class="text-white p-2" title="Exportar a PDF">
+        <span class="material-symbols-outlined text-2xl">download</span>
+      </button>
+    </div>
+  </header>
+  <div class="flex gap-2 p-4 pt-2 overflow-x-auto whitespace-nowrap">
+    <button class="h-9 shrink-0 rounded-full bg-primary/20 px-4 text-primary text-sm font-medium">Últimos 7 días</button>
+    <button class="h-9 shrink-0 rounded-full bg-primary/20 px-4 text-primary text-sm font-medium">Este Mes</button>
+    <button class="h-9 shrink-0 rounded-full bg-primary px-4 text-background-dark text-sm font-bold">Último Mes</button>
+  </div>
+  <div class="flex flex-col gap-4 p-4 pt-0">
+    <div class="rounded-xl border border-border-dark bg-card-dark p-4">
+      <h2 class="text-primary text-xl font-display font-bold pb-4">Balance Mensual</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="flex-1 flex-col gap-1 rounded-lg p-4 bg-background-dark/50">
+          <p class="text-white/70 text-sm font-medium">Ingresos Totales</p>
+          <p class="text-white text-2xl font-bold">$15,750.00</p>
+        </div>
+        <div class="flex-1 flex-col gap-1 rounded-lg p-4 bg-background-dark/50">
+          <p class="text-white/70 text-sm font-medium">Egresos Totales</p>
+          <p class="text-white text-2xl font-bold">$9,230.00</p>
+        </div>
+      </div>
+      <div class="mt-4 flex-1 flex-col gap-1 rounded-lg p-4 bg-background-dark/50">
+        <p class="text-white/70 text-sm font-medium">Ganancia Neta</p>
+        <p class="text-primary text-3xl font-bold">$6,520.00</p>
+      </div>
+    </div>
+
+    <a routerLink="/budgets" class="block rounded-xl border border-border-dark bg-card-dark p-4 hover:bg-border-dark transition-colors">
+      <h2 class="text-primary text-xl font-display font-bold pb-2">Gestión de Presupuestos</h2>
+      <p class="text-text-muted text-sm">Crea, ajusta y asigna cotizaciones internas a tus obras para una planificación financiera precisa.</p>
+    </a>
+    
+    <!-- Summary Card for Nómina (Payroll) -->
+    <div class="rounded-xl border border-border-dark bg-card-dark p-4">
+      <h2 class="text-primary text-xl font-display font-bold pb-4">Nómina</h2>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-white/70 text-sm font-medium">Sueldos Pendientes este mes</p>
+          <p class="text-white text-2xl font-bold mt-1">$9,850.00</p>
+        </div>
+        <a routerLink="/payroll" class="bg-primary text-background-dark font-bold py-2 px-4 rounded-lg hover:bg-primary/90 transition-colors">
+          Gestionar Pagos
+        </a>
+      </div>
+    </div>
+
+    <div class="rounded-xl border border-border-dark bg-card-dark p-4">
+      <h2 class="text-primary text-xl font-display font-bold pb-4">Resumen por Obra</h2>
+      <div class="flex flex-col gap-3">
+        @for(obra of obras(); track obra.id) {
+          <a [routerLink]="['/finances/obra', obra.id]" class="flex items-center gap-4 rounded-lg bg-background-dark/50 p-3 hover:bg-background-dark transition-colors duration-200">
+            <div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/20">
+              <span class="material-symbols-outlined text-primary text-2xl">{{ obra.icon }}</span>
+            </div>
+            <div class="flex-1">
+              <p class="text-white font-semibold">{{ obra.title }}</p>
+              <p class="text-white/70 text-sm">Ganancia: <span class="text-green-400 font-medium">{{ obra.profit | currency:'$':'symbol':'1.2-2' }}</span></p>
+            </div>
+            <span class="material-symbols-outlined text-white/70">chevron_right</span>
+          </a>
+        }
+      </div>
+    </div>
+
+    <div class="rounded-xl border border-border-dark bg-card-dark p-4">
+      <h2 class="text-primary text-xl font-display font-bold pb-4">Ganancias y Pérdidas</h2>
+      <div class="space-y-3">
+        <div class="grid grid-cols-3 gap-4 px-3">
+          <p class="text-white/70 text-sm font-medium text-left">Concepto</p>
+          <p class="text-white/70 text-sm font-medium text-right">Monto</p>
+          <p class="text-white/70 text-sm font-medium text-right">%</p>
+        </div>
+        <div class="grid grid-cols-3 gap-4 items-center rounded-lg bg-background-dark/50 p-3">
+          <p class="text-white font-medium text-left">Ingresos</p>
+          <p class="text-white font-medium text-right">$15,750.00</p>
+          <p class="text-white/70 font-medium text-right">100%</p>
+        </div>
+        <div class="grid grid-cols-3 gap-4 items-center rounded-lg bg-background-dark/50 p-3">
+          <p class="text-white font-medium text-left">Costos de Venta</p>
+          <p class="text-white font-medium text-right">($5,500.00)</p>
+          <p class="text-white/70 font-medium text-right">34.9%</p>
+        </div>
+         <div class="grid grid-cols-3 gap-4 items-center rounded-lg bg-background-dark/50 p-3">
+          <p class="text-white font-medium text-left">Gastos Operativos</p>
+          <p class="text-white font-medium text-right">($3,730.00)</p>
+          <p class="text-white/70 font-medium text-right">23.7%</p>
+        </div>
+        <div class="grid grid-cols-3 gap-4 items-center rounded-lg bg-primary/10 p-3 mt-2 border-t border-primary/20">
+          <p class="text-primary font-bold text-left text-lg">Ganancia Neta</p>
+          <p class="text-primary font-bold text-right text-lg">$6,520.00</p>
+          <p class="text-primary/70 font-bold text-right text-lg">41.4%</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Profit Distribution Card -->
+    <div class="rounded-xl border border-border-dark bg-card-dark p-4">
+      <h2 class="text-primary text-xl font-display font-bold pb-4">Distribución de Ganancias</h2>
+      <div class="space-y-4">
+        <div class="flex items-center justify-between rounded-lg bg-background-dark/50 p-3">
+          <p class="text-white/70 text-sm font-medium">Ganancia Neta del Mes</p>
+          <p class="text-primary font-bold text-lg">$6,520.00</p>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="rounded-lg bg-background-dark/50 p-3 text-center">
+            <p class="text-white/70 text-sm font-medium">Distribución Socios (20%)</p>
+            <p class="text-white font-bold text-lg mt-1">$1,304.00</p>
+          </div>
+          <div class="rounded-lg bg-background-dark/50 p-3 text-center">
+            <p class="text-white/70 text-sm font-medium">Reinversión (80%)</p>
+            <p class="text-white font-bold text-lg mt-1">$5,216.00</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Action Buttons Footer -->
+<footer class="fixed bottom-20 left-0 right-0 z-10 bg-background-dark/80 backdrop-blur-sm p-4 border-t border-border-dark">
+  <div class="flex items-center justify-center gap-4 max-w-md mx-auto">
+    <button (click)="openTransactionModal('expense')" class="flex-1 rounded-full bg-red-500/20 py-3.5 text-center font-bold text-red-400 hover:bg-red-500/30 transition-colors">
+      <span>Registrar Egreso</span>
+    </button>
+    <button (click)="openTransactionModal('income')" class="flex-1 rounded-full bg-green-500/20 py-3.5 text-center font-bold text-green-400 hover:bg-green-500/30 transition-colors">
+      <span>Registrar Ingreso</span>
+    </button>
+  </div>
+</footer>
+
+<!-- New Transaction Modal -->
+@if (isModalOpen()) {
+  <div class="fixed inset-0 bg-black/60 z-30 flex items-center justify-center p-4" (click)="closeTransactionModal()">
+    <div class="bg-card-dark rounded-xl w-full max-w-md p-6" (click)="$event.stopPropagation()">
+      <h3 class="font-display text-xl text-primary mb-6">{{ modalTitle() }}</h3>
+      <form [formGroup]="transactionForm" (ngSubmit)="saveTransaction()">
+        <div class="space-y-4">
+           <select formControlName="obraId" class="w-full bg-border-dark rounded-lg border-none text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary">
+            <option value="" disabled>Seleccionar Obra</option>
+            @for(obra of obras(); track obra.id) {
+              <option [value]="obra.id">{{ obra.title }}</option>
+            }
+          </select>
+          <input formControlName="description" type="text" placeholder="Descripción" class="w-full bg-border-dark rounded-lg border-none text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary">
+          <input formControlName="amount" type="number" placeholder="Monto" class="w-full bg-border-dark rounded-lg border-none text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary">
+          <input formControlName="date" type="date" class="w-full bg-border-dark rounded-lg border-none text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary">
+        </div>
+        <div class="flex justify-end gap-3 mt-8">
+          <button type="button" (click)="closeTransactionModal()" class="px-4 py-2 rounded-lg bg-border-dark text-text-light hover:bg-border-dark/70">Cancelar</button>
+          <button type="submit" [disabled]="transactionForm.invalid" class="px-4 py-2 rounded-lg bg-primary text-background-dark disabled:bg-primary/50 disabled:cursor-not-allowed">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

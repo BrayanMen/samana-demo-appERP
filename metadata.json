@@ -1,0 +1,5 @@
+{
+  "name": "Samana - Gestión de Obras",
+  "description": "An application for a remodeling company to manage employees, materials, inventory, expenses, and business accounting, centralizing the entire operation for administrators and providing financial reports for accountants.",
+  "requestFramePermissions": []
+}

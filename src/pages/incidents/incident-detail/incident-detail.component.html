@@ -1,0 +1,113 @@
+<div class="bg-background-dark min-h-dvh">
+  @if (incident(); as inc) {
+    <!-- Top App Bar -->
+    <header class="sticky top-0 z-10 flex items-center bg-background-dark/80 backdrop-blur-sm p-4 border-b border-border-dark">
+      <a routerLink="/incidents" class="flex size-10 shrink-0 items-center justify-center rounded-full -ml-2">
+        <span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
+      </a>
+      <h1 class="text-text-light text-xl font-display leading-tight flex-1 text-center pr-10">Detalle de Incidencia</h1>
+    </header>
+
+    <main class="flex-1 px-4 pb-8">
+      <!-- Header Card -->
+      <section class="mt-4 mb-6">
+        <h2 class="text-3xl font-display text-text-light mb-2">{{ inc.title }}</h2>
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium" [class]="getStatusClass(inc.status)">
+            <span class="size-2 rounded-full mr-2" [class]="getStatusClass(inc.status).replace('text', 'bg').replace('/20', '')"></span>
+            {{ inc.status }}
+          </span>
+          <p class="text-text-muted text-sm">Reportado el {{ inc.reportDate }}</p>
+        </div>
+      </section>
+
+      <!-- Media Gallery -->
+      <section class="mb-8">
+        <h3 class="text-lg font-bold text-text-light mb-3 font-display">Fotos y Videos</h3>
+        <div class="flex space-x-3 overflow-x-auto pb-2 -mx-4 px-4">
+          @for (photo of inc.photos; track photo.url) {
+            <div class="flex-shrink-0 w-32 h-32 rounded-lg bg-cover bg-center bg-no-repeat" [style.background-image]="'url(' + photo.url + ')'" [attr.aria-label]="photo.alt"></div>
+          }
+          <div class="flex-shrink-0 w-32 h-32 rounded-lg bg-card-dark flex items-center justify-center text-text-muted border-2 border-dashed border-border-dark cursor-pointer hover:bg-border-dark">
+            <span class="material-symbols-outlined text-4xl">add_photo_alternate</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Description -->
+      <section class="mb-8">
+        <h3 class="text-lg font-bold text-text-light mb-2 font-display">Descripción</h3>
+        <p class="text-text-light leading-relaxed">{{ inc.description }}</p>
+      </section>
+
+      <!-- Key Details -->
+      <section class="mb-8">
+        <h3 class="text-lg font-bold text-text-light mb-4 font-display">Detalles</h3>
+        <div class="flex flex-col gap-px overflow-hidden rounded-lg bg-border-dark">
+          <button class="flex items-center justify-between p-4 bg-card-dark hover:bg-border-dark transition-colors">
+            <span class="text-text-muted text-sm">Obra</span>
+            <div class="flex items-center gap-2">
+              <span class="text-text-light font-medium">{{ inc.obra }}</span>
+              <span class="material-symbols-outlined text-text-muted text-xl">arrow_forward_ios</span>
+            </div>
+          </button>
+          <button class="flex items-center justify-between p-4 bg-card-dark hover:bg-border-dark transition-colors">
+            <span class="text-text-muted text-sm">Reportado por</span>
+            <div class="flex items-center gap-2">
+              <span class="text-text-light font-medium">{{ inc.reporter }}</span>
+              <span class="material-symbols-outlined text-text-muted text-xl">arrow_forward_ios</span>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <!-- Management Controls -->
+      <section class="mb-8">
+        <h3 class="text-lg font-bold text-text-light mb-4 font-display">Gestión</h3>
+        <div class="flex flex-col gap-px overflow-hidden rounded-lg bg-border-dark">
+          <div class="flex items-center justify-between p-4 bg-card-dark">
+            <span class="text-text-muted text-sm">Estado</span>
+            <select class="form-select appearance-none bg-transparent text-primary font-medium border-0 focus:ring-0 text-right pr-8">
+              <option>Abierta</option>
+              <option>En Proceso</option>
+              <option>Resuelta</option>
+            </select>
+          </div>
+          <button class="flex items-center justify-between p-4 bg-card-dark hover:bg-border-dark transition-colors">
+            <span class="text-text-muted text-sm">Responsable</span>
+            <div class="flex items-center gap-2">
+              <span class="text-text-light font-medium">{{ inc.responsible || 'Sin asignar' }}</span>
+              <span class="material-symbols-outlined text-text-muted text-xl">arrow_forward_ios</span>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <!-- Comments -->
+      <section class="pb-6">
+        <h3 class="text-lg font-bold text-text-light mb-4 font-display">Comentarios</h3>
+        <div class="flex flex-col gap-4">
+          <div class="bg-card-dark rounded-lg p-3 border border-border-dark">
+            <textarea class="w-full bg-transparent text-text-light border-0 p-0 focus:ring-0 placeholder:text-text-muted" placeholder="Añadir una nota de resolución..." rows="3"></textarea>
+          </div>
+          <button class="w-full h-12 rounded-lg bg-primary text-background-dark text-base font-bold hover:bg-primary/90 transition-colors">
+            Publicar Comentario
+          </button>
+        </div>
+        <div class="mt-6 flex flex-col gap-4">
+          @for (comment of inc.comments; track $index) {
+            <div class="text-sm">
+              <div class="flex items-center gap-2 mb-1">
+                <p class="font-bold text-text-light">{{ comment.author }}</p>
+                <p class="text-text-muted">{{ comment.timestamp }}</p>
+              </div>
+              <p class="text-text-light leading-relaxed">{{ comment.comment }}</p>
+            </div>
+          }
+        </div>
+      </section>
+    </main>
+  } @else {
+    <p class="p-4 text-text-muted text-center">Cargando incidencia...</p>
+  }
+</div>

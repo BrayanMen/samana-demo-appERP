@@ -1,0 +1,55 @@
+<div class="relative flex min-h-dvh w-full flex-col bg-background-dark text-text-light">
+  <header class="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border-dark bg-background-dark/80 px-4 backdrop-blur-sm">
+    <a routerLink="/inventory" class="flex items-center justify-center p-2 -ml-2">
+      <span class="material-symbols-outlined">arrow_back_ios_new</span>
+    </a>
+    <h1 class="text-lg font-bold text-gray-100">Registrar Pérdida</h1>
+    <div class="w-8"></div>
+  </header>
+
+  <main class="flex-1 overflow-y-auto p-4 pb-24">
+    <form [formGroup]="lossForm" (ngSubmit)="registerLoss()" class="space-y-6">
+      
+      <div>
+        <label for="item" class="block text-sm font-medium text-text-muted mb-1">Ítem de Inventario</label>
+        <select id="item" formControlName="item" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light focus:ring-2 focus:ring-primary focus:border-primary">
+          <option value="" disabled>Seleccionar ítem</option>
+          <option value="martillo">Martillo de Garra</option>
+          <option value="taladro">Taladro Inalámbrico 20V</option>
+          <option value="pintura">Pintura Blanca (Lata 1 Gal)</option>
+        </select>
+      </div>
+
+       <div>
+        <label for="quantity" class="block text-sm font-medium text-text-muted mb-1">Cantidad</label>
+        <input id="quantity" formControlName="quantity" type="number" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary">
+      </div>
+      
+      <div>
+        <label for="lossDate" class="block text-sm font-medium text-text-muted mb-1">Fecha de Pérdida</label>
+        <input id="lossDate" formControlName="lossDate" type="date" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary">
+      </div>
+
+       <div>
+        <label for="reason" class="block text-sm font-medium text-text-muted mb-1">Motivo</label>
+        <select id="reason" formControlName="reason" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light focus:ring-2 focus:ring-primary focus:border-primary">
+          <option value="" disabled>Seleccionar un motivo</option>
+          <option value="dano">Dañado en Obra</option>
+          <option value="robo">Robo</option>
+          <option value="desgaste">Desgaste por uso</option>
+        </select>
+      </div>
+      
+      <div>
+        <label for="notes" class="block text-sm font-medium text-text-muted mb-1">Observaciones (Opcional)</label>
+        <textarea id="notes" formControlName="notes" placeholder="Añadir notas adicionales..." rows="3" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary"></textarea>
+      </div>
+    </form>
+  </main>
+
+  <footer class="fixed bottom-0 left-0 right-0 z-10 border-t border-border-dark bg-background-dark/80 p-4 backdrop-blur-sm">
+    <button (click)="registerLoss()" [disabled]="lossForm.invalid" class="h-14 w-full rounded-xl bg-primary text-lg font-bold text-background-dark disabled:bg-primary/50 disabled:cursor-not-allowed">
+      Registrar Pérdida
+    </button>
+  </footer>
+</div>

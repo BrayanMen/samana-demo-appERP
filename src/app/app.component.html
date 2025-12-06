@@ -1,0 +1,8 @@
+<div class="relative flex min-h-dvh w-full flex-col">
+  <main class="grow" [class.pb-20]="isAuthenticated()">
+    <router-outlet></router-outlet>
+  </main>
+  @if (isAuthenticated()) {
+    <app-bottom-nav></app-bottom-nav>
+  }
+</div>

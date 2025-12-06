@@ -1,0 +1,67 @@
+<div class="relative flex min-h-dvh w-full flex-col bg-background-dark text-text-light">
+  <header class="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border-dark bg-background-dark/80 px-4 backdrop-blur-sm">
+    <a routerLink="/inventory" class="flex items-center justify-center p-2 -ml-2">
+      <span class="material-symbols-outlined">arrow_back_ios_new</span>
+    </a>
+    <h1 class="text-lg font-bold text-gray-100">Registro de Devolución</h1>
+    <div class="w-8"></div>
+  </header>
+
+  <main class="flex-1 overflow-y-auto p-4 pb-24">
+    <form [formGroup]="returnForm" (ngSubmit)="registerReturn()" class="space-y-6">
+      
+      <div>
+          <div class="flex h-11 flex-1 items-center justify-center rounded-lg bg-card-dark p-1">
+            <label class="flex-1 text-center py-1.5 rounded-md text-sm font-semibold cursor-pointer transition-colors" [class.bg-primary]="returnForm.value.itemType === 'Materiales'" [class.text-background-dark]="returnForm.value.itemType === 'Materiales'">
+              <input type="radio" formControlName="itemType" value="Materiales" class="hidden">
+              Materiales
+            </label>
+            <label class="flex-1 text-center py-1.5 rounded-md text-sm font-semibold cursor-pointer transition-colors" [class.bg-primary]="returnForm.value.itemType === 'Herramientas'" [class.text-background-dark]="returnForm.value.itemType === 'Herramientas'">
+              <input type="radio" formControlName="itemType" value="Herramientas" class="hidden">
+              Herramientas
+            </label>
+          </div>
+      </div>
+
+      <div>
+        <label for="item" class="block text-sm font-medium text-text-muted mb-1">Ítem</label>
+        <select id="item" formControlName="item" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light focus:ring-2 focus:ring-primary focus:border-primary">
+          <option value="" disabled>Seleccionar ítem</option>
+          <option value="martillo">Martillo de Garra</option>
+          <option value="taladro">Taladro Inalámbrico 18V</option>
+          <option value="cemento">Bolsa de Cemento 25kg</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="quantity" class="block text-sm font-medium text-text-muted mb-1">Cantidad</label>
+        <input id="quantity" formControlName="quantity" type="number" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light focus:ring-2 focus:ring-primary focus:border-primary">
+      </div>
+      
+      <div>
+        <label for="returnDate" class="block text-sm font-medium text-text-muted mb-1">Fecha de Devolución</label>
+        <input id="returnDate" formControlName="returnDate" type="date" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light focus:ring-2 focus:ring-primary focus:border-primary">
+      </div>
+
+      <div>
+        <label for="origin" class="block text-sm font-medium text-text-muted mb-1">Origen (Obra/Empleado)</label>
+        <select id="origin" formControlName="origin" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light focus:ring-2 focus:ring-primary focus:border-primary">
+          <option value="" disabled>Seleccionar origen</option>
+          <option value="obra-1">Obra: Remodelación Central</option>
+          <option value="empleado-1">Empleado: Juan Pérez</option>
+        </select>
+      </div>
+      
+      <div>
+        <label for="notes" class="block text-sm font-medium text-text-muted mb-1">Observaciones</label>
+        <textarea id="notes" formControlName="notes" placeholder="Ej: Herramienta en buen estado, material sobrante..." rows="3" class="w-full bg-card-dark rounded-lg border-2 border-border-dark text-text-light placeholder:text-text-muted focus:ring-2 focus:ring-primary focus:border-primary"></textarea>
+      </div>
+    </form>
+  </main>
+
+  <footer class="fixed bottom-0 left-0 right-0 z-10 border-t border-border-dark bg-background-dark/80 p-4 backdrop-blur-sm">
+    <button (click)="registerReturn()" [disabled]="returnForm.invalid" class="h-14 w-full rounded-xl bg-primary text-lg font-bold text-background-dark disabled:bg-primary/50 disabled:cursor-not-allowed">
+      Registrar Devolución
+    </button>
+  </footer>
+</div>

@@ -35,7 +35,7 @@
   </header>
 
   <!-- List Items -->
-  <main class="flex-grow p-4">
+  <main class="grow p-4">
     <div class="space-y-3">
       @for (incident of filteredIncidents(); track incident.id) {
         <a [routerLink]="['/incidents', incident.id]" class="block p-4 rounded-xl bg-card-dark hover:bg-border-dark transition-colors">
